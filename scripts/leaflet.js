@@ -87,6 +87,7 @@ var swappedCoordinates = swapLatLongCoordinates([originalCoordinates]);
 var map = L.map("map").fitBounds(swappedCoordinates);
 
 var markerCluster = L.markerClusterGroup();
+var selectedPinsCluster = L.markerClusterGroup();
 
 L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
   maxZoom: 19,
@@ -107,7 +108,10 @@ function onMapClick(e) {
   // $(".leaflet-marker-icon").remove(); $(".leaflet-popup").remove(); // remove existing markers
   // $(".leaflet-pane.leaflet-shadow-pane").remove();    //remove marker shadow
 
-  L.marker([e.latlng.lat, e.latlng.lng]).addTo(map);
+  let marker = L.marker([e.latlng.lat, e.latlng.lng]);
+  marker.bindPopup(`lat: ${e.latlng.lat}, lng: ${e.latlng.lng}`)
+  selectedPinsCluster.addLayer(marker);
+  map.addLayer(selectedPinsCluster);
 }
 
 // Function to close the modal
