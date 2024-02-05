@@ -5,6 +5,43 @@ function swapLatLongCoordinates(coordinates) {
     area.map((polygon) => polygon.map((coord) => [coord[1], coord[0]]))
   );
 }
+$(document).ready(function() {
+  // Event listener for the select element
+  $("#countrySelect").on("change", function() {
+    var selectedCountryCode = $(this).val();
+
+    // Call a function to fetch coordinates based on the selected country code
+    console.log('here');
+    fetchCoordinates(selectedCountryCode);
+  });
+});
+ // Function to fetch coordinates based on the selected country code
+ function fetchCoordinates(countryCode) {
+  // Make an AJAX request to fetch the JSON data
+  $.ajax({
+    url: './scripts/countryBorders.geo.json', 
+    dataType: 'json',
+    success: function(data) {
+      // Find the selected country in the JSON data
+      var selectedCountry = data.features.find(function(country) {
+        return country.properties.iso_a2 === countryCode;
+      });
+
+      if (selectedCountry) {
+        // Swap the coordinates if needed
+        var coordinates = swapLatLongCoordinates([selectedCountry.geometry.coordinates]);
+
+        // Update the map bounds
+        map.fitBounds(coordinates);
+      } else {
+        console.error('Selected country not found in the JSON data.');
+      }
+    },
+    error: function(xhr, status, error) {
+      console.error('Error fetching JSON data:', status, error);
+    }
+  });
+}
 
 var originalCoordinates = [
   [
@@ -103,11 +140,11 @@ map.addLayer(markerCluster);
 
 var yourPosition = L.popup().setContent("Your Position!");
 
-//navigator.geolocation.getCurrentPosition(showPosition);
+navigator.geolocation.getCurrentPosition(showPosition);
 
 function showPosition(position) {
   // Set the map view to the current location
-  //map.setView([position.coords.latitude, position.coords.longitude], 13);
+  map.setView([position.coords.latitude, position.coords.longitude], 13);
 
   // Display a marker at your current location
   L.easyButton("fa-crosshairs", function (btn, map) {

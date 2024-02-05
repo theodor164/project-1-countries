@@ -22,7 +22,7 @@ function generateOptions($countries) {
 }
 
 //Render the select element
-echo '<select>';
+echo '<select id="countrySelect">';
 echo generateOptions($countries);
 echo '</select>';
 ?>
