@@ -87,40 +87,16 @@ var swappedCoordinates = swapLatLongCoordinates([originalCoordinates]);
 var map = L.map("map").fitBounds(swappedCoordinates);
 
 var markerCluster = L.markerClusterGroup();
-var selectedPinsCluster = L.markerClusterGroup();
 
 L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
   maxZoom: 19,
   attribution:
-    '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+  '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
 }).addTo(map);
 
 var popup = L.popup();
 
-function onMapClick(e) {
-  var modal = document.getElementById("myModal");
-  modal.style.display = "block";
-  var informationParagraph = document.querySelector("#info");
-  informationParagraph.innerHTML = e.latlng.toString();
 
-  console.log(e);
-
-  // $(".leaflet-marker-icon").remove(); $(".leaflet-popup").remove(); // remove existing markers
-  // $(".leaflet-pane.leaflet-shadow-pane").remove();    //remove marker shadow
-
-  let marker = L.marker([e.latlng.lat, e.latlng.lng]);
-  marker.bindPopup(`lat: ${e.latlng.lat}, lng: ${e.latlng.lng}`)
-  selectedPinsCluster.addLayer(marker);
-  map.addLayer(selectedPinsCluster);
-}
-
-// Function to close the modal
-function closeModal() {
-  var modal = document.getElementById("myModal");
-  modal.style.display = "none";
-}
-
-map.on("click", onMapClick);
 
 L.geoJson(data, {
   onEachFeature: function (feature, layer) {

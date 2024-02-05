@@ -46,6 +46,7 @@
   
   <script src="./scripts/geojson.js"></script>
   <script src="./scripts/leaflet.js"></script>
+  <script src="./scripts/modal.js"></script>
 
 </body>
 </html>
