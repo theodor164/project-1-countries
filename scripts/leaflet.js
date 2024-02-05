@@ -131,5 +131,6 @@ function showPosition(position) {
     yourPosition
       .setLatLng([position.coords.latitude, position.coords.longitude])
       .openOn(map);
+      map.setView([position.coords.latitude, position.coords.longitude], 13);
   }).addTo(map);
 }
