@@ -40,7 +40,7 @@
   <div id="myModal" class="modal">
     <div class="modal-content">
       <span class="close" onclick="closeModal()">&times;</span>
-      <p id="info"></p>
+      <div id="info"></div>
     </div>
   </div>
   
