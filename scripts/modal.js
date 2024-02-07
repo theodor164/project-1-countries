@@ -1,6 +1,8 @@
 var selectedPinsCluster = L.markerClusterGroup();
 
 function fetchLocationInfo(lat, lng) {
+  document.querySelector('#info').innerHTML = `<div id="loader"></div>`
+  document.getElementById('loader').style.display = 'block';
   $.ajax({
     url: './scripts/getLocationInfo.php',
     type: 'GET',
@@ -65,7 +67,7 @@ function fetchLocationInfo(lat, lng) {
                           }
                           var wikipediaLinks = JSON.parse(response);
                           // console.log(wikipediaLinks);
-
+                          document.getElementById('loader').style.display = 'none';
                           displayLocationInfo(locationInfo, exchangeInfo, lat, lng, moreInfo, weatherInfo, weatherForecast, wikipediaLinks);
                         },
                         error: function(xhr, status, error) {
@@ -129,6 +131,7 @@ function displayLocationInfo(locationInfo, exchangeInfo, lat, lng, moreInfo, wea
     <a href="http://${wikipediaLinks.geonames[2].wikipediaUrl}">${wikipediaLinks.geonames[2].title}</a> <br>
     <a href="http://${wikipediaLinks.geonames[3].wikipediaUrl}">${wikipediaLinks.geonames[3].title}</a> <br>
     <a href="http://${wikipediaLinks.geonames[4].wikipediaUrl}">${wikipediaLinks.geonames[4].title}</a> <br>
+    <div id="loader"></div>
   `;
 }
 
@@ -154,3 +157,13 @@ function closeModal() {
 }
 
 map.on("click", onMapClick);
+
+// Function to remove all markers
+function removeAllMarkers() {
+  selectedPinsCluster.clearLayers();
+}
+
+// Create an easyButton to remove all markers
+L.easyButton('<i class="fas fa-trash-alt"></i>', function(btn, map) {
+  removeAllMarkers();
+}).addTo(map);
