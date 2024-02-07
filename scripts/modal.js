@@ -10,8 +10,6 @@ function fetchLocationInfo(lat, lng) {
     success: function(response) {
       // Parse OpenCage API response
       var locationInfo = JSON.parse(response);
-      // console.log(locationInfo);
-      // Display relevant information in the modal
 
       $.ajax({
         url: './scripts/getCurrentExchangeRate.php',
@@ -22,7 +20,6 @@ function fetchLocationInfo(lat, lng) {
             return;
           }
           var exchangeInfo = JSON.parse(response);
-          // console.log(exchangeInfo.rates[locationInfo.results[0].annotations.currency.iso_code]);
 
           $.ajax({
             url: './scripts/getMoreInfo.php',
@@ -66,7 +63,6 @@ function fetchLocationInfo(lat, lng) {
                             return;
                           }
                           var wikipediaLinks = JSON.parse(response);
-                          // console.log(wikipediaLinks);
                           document.getElementById('loader').style.display = 'none';
                           displayLocationInfo(locationInfo, exchangeInfo, lat, lng, moreInfo, weatherInfo, weatherForecast, wikipediaLinks);
                         },
@@ -107,7 +103,8 @@ function fetchLocationInfo(lat, lng) {
 
 function displayLocationInfo(locationInfo, exchangeInfo, lat, lng, moreInfo, weatherInfo, weatherForecast, wikipediaLinks) {
   var infoParagraph = document.querySelector('#info');
-  infoParagraph.innerHTML = `
+  if(wikipediaLinks.geonames[4]) {
+    infoParagraph.innerHTML = `
     <p>Latitude: ${lat}</p>
     <p>Longitude: ${lng}</p>
     <p class="color-blue">Location Info:</p>
@@ -134,7 +131,29 @@ function displayLocationInfo(locationInfo, exchangeInfo, lat, lng, moreInfo, wea
     <p><a href="http://${wikipediaLinks.geonames[3].wikipediaUrl}">${wikipediaLinks.geonames[3].title}</a></p>
     <p><a href="http://${wikipediaLinks.geonames[4].wikipediaUrl}">${wikipediaLinks.geonames[4].title}</a></p>
     <div id="loader"></div>
-  `;
+  `;}
+  else {
+    infoParagraph.innerHTML = `
+    <p>Latitude: ${lat}</p>
+    <p>Longitude: ${lng}</p>
+    <p class="color-blue">Location Info:</p>
+    <p>Country: ${locationInfo.results[0].components.country} / Capital city: ${moreInfo.geonames[0].capital}</p>
+    <p>Population: ${moreInfo.geonames[0].population}</p>
+    <p>City: ${locationInfo.results[0].components.city}</p>
+    <p>Address: ${locationInfo.results[0].formatted}</p>
+    <p>Temperature: ${weatherInfo.weatherObservation.temperature}</p>
+    <div class="forecastContainer">
+      <div>
+        <div class="center-the-text color-blue">Weather Forecast:</div>
+        <div>Today: Highest: ${weatherForecast.forecast.forecastday[0].day.maxtemp_c}; Lowest: ${weatherForecast.forecast.forecastday[0].day.mintemp_c}.</div> 
+        <div>Tomorrow: Highest: ${weatherForecast.forecast.forecastday[1].day.maxtemp_c}; Lowest: ${weatherForecast.forecast.forecastday[1].day.mintemp_c}.</div> 
+        <div>Day After Tomorrow: Highest: ${weatherForecast.forecast.forecastday[2].day.maxtemp_c}; Lowest: ${weatherForecast.forecast.forecastday[2].day.mintemp_c}.</div> 
+      </div>
+    </div>
+    <p class="color-blue">Currency: ${locationInfo.results[0].annotations.currency.name}</p>
+    <p>1 USD = ${exchangeInfo.rates[locationInfo.results[0].annotations.currency.iso_code]} ${locationInfo.results[0].annotations.currency.iso_code}</p>
+    <p>Flag: ${locationInfo.results[0].annotations.flag}</p>`;
+  }
 }
 
 

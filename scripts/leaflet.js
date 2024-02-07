@@ -5,6 +5,7 @@ function swapLatLongCoordinates(coordinates) {
     area.map((polygon) => polygon.map((coord) => [coord[1], coord[0]]))
   );
 }
+
 $(document).ready(function() {
   // Event listener for the select element
   $("#countrySelect").on("change", function() {
@@ -95,8 +96,6 @@ L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
 }).addTo(map);
 
 var popup = L.popup();
-
-
 
 L.geoJson(data, {
   onEachFeature: function (feature, layer) {
