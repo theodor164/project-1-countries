@@ -11,7 +11,7 @@ $(document).ready(function() {
     var selectedCountryCode = $(this).val();
 
     // Call a function to fetch coordinates based on the selected country code
-    console.log('here');
+    // console.log('here');
     fetchCoordinates(selectedCountryCode);
   });
 });

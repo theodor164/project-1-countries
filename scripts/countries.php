@@ -10,19 +10,25 @@ $countries = $data['features'];
 
 // Function to generate options for the select element
 function generateOptions($countries) {
+
+    // Sort countries alphabetically by name
+    usort($countries, function($a, $b) {
+        return strcmp($a['properties']['name'], $b['properties']['name']);
+    });
+
     $options = '';
 
     foreach ($countries as $country) {
         $name = $country['properties']['name'];
         $iso_a2 = $country['properties']['iso_a2'];
-        $options .= "<option value=\"$iso_a2\">$name</option>";
+        $options .= "<option value=\"$iso_a2\" class='text-center'>$name</option>";
     }
 
     return $options;
 }
 
 //Render the select element
-echo '<select id="countrySelect">';
+echo '<select id="countrySelect" class="custom-select mr-sm-2">';
 echo generateOptions($countries);
 echo '</select>';
 ?>

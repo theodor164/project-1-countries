@@ -108,29 +108,31 @@ function fetchLocationInfo(lat, lng) {
 function displayLocationInfo(locationInfo, exchangeInfo, lat, lng, moreInfo, weatherInfo, weatherForecast, wikipediaLinks) {
   var infoParagraph = document.querySelector('#info');
   infoParagraph.innerHTML = `
-    Latitude: ${lat}<br>
-    Longitude: ${lng}<br>
-    Location Info:<br>
-    Country: ${locationInfo.results[0].components.country} / Capital city: ${moreInfo.geonames[0].capital}<br>
-    Population: ${moreInfo.geonames[0].population}<br>
-    City: ${locationInfo.results[0].components.city}<br>
-    Address: ${locationInfo.results[0].formatted}<br>
-    Temperature: ${weatherInfo.weatherObservation.temperature}<br>
+    <p>Latitude: ${lat}</p>
+    <p>Longitude: ${lng}</p>
+    <p class="color-blue">Location Info:</p>
+    <p>Country: ${locationInfo.results[0].components.country} / Capital city: ${moreInfo.geonames[0].capital}</p>
+    <p>Population: ${moreInfo.geonames[0].population}</p>
+    <p>City: ${locationInfo.results[0].components.city}</p>
+    <p>Address: ${locationInfo.results[0].formatted}</p>
+    <p>Temperature: ${weatherInfo.weatherObservation.temperature}</p>
     <div class="forecastContainer">
-    Weather Forecast: <br>
-    Today: Highest: ${weatherForecast.forecast.forecastday[0].day.maxtemp_c}; Lowest: ${weatherForecast.forecast.forecastday[0].day.mintemp_c}.<br>
-    Tomorrow: Highest: ${weatherForecast.forecast.forecastday[1].day.maxtemp_c}; Lowest: ${weatherForecast.forecast.forecastday[1].day.mintemp_c}.<br>
-    Day After Tomorrow: Highest: ${weatherForecast.forecast.forecastday[2].day.maxtemp_c}; Lowest: ${weatherForecast.forecast.forecastday[2].day.mintemp_c}.<br>
+      <div>
+        <div class="center-the-text color-blue">Weather Forecast:</div>
+        <div>Today: Highest: ${weatherForecast.forecast.forecastday[0].day.maxtemp_c}; Lowest: ${weatherForecast.forecast.forecastday[0].day.mintemp_c}.</div> 
+        <div>Tomorrow: Highest: ${weatherForecast.forecast.forecastday[1].day.maxtemp_c}; Lowest: ${weatherForecast.forecast.forecastday[1].day.mintemp_c}.</div> 
+        <div>Day After Tomorrow: Highest: ${weatherForecast.forecast.forecastday[2].day.maxtemp_c}; Lowest: ${weatherForecast.forecast.forecastday[2].day.mintemp_c}.</div> 
+      </div>
     </div>
-    Currency: ${locationInfo.results[0].annotations.currency.name}<br>
-    1 USD = ${exchangeInfo.rates[locationInfo.results[0].annotations.currency.iso_code]} ${locationInfo.results[0].annotations.currency.iso_code}<br>
-    Flag: ${locationInfo.results[0].annotations.flag}<br>
-    Useful Info: <br>
-    <a href="http://${wikipediaLinks.geonames[0].wikipediaUrl}">${wikipediaLinks.geonames[0].title}</a> <br>
-    <a href="http://${wikipediaLinks.geonames[1].wikipediaUrl}">${wikipediaLinks.geonames[1].title}</a> <br>
-    <a href="http://${wikipediaLinks.geonames[2].wikipediaUrl}">${wikipediaLinks.geonames[2].title}</a> <br>
-    <a href="http://${wikipediaLinks.geonames[3].wikipediaUrl}">${wikipediaLinks.geonames[3].title}</a> <br>
-    <a href="http://${wikipediaLinks.geonames[4].wikipediaUrl}">${wikipediaLinks.geonames[4].title}</a> <br>
+    <p class="color-blue">Currency: ${locationInfo.results[0].annotations.currency.name}</p>
+    <p>1 USD = ${exchangeInfo.rates[locationInfo.results[0].annotations.currency.iso_code]} ${locationInfo.results[0].annotations.currency.iso_code}</p>
+    <p>Flag: ${locationInfo.results[0].annotations.flag}</p>
+    <div class="center-the-text color-blue">Useful Info:</div>
+    <p><a href="http://${wikipediaLinks.geonames[0].wikipediaUrl}">${wikipediaLinks.geonames[0].title}</a></p>
+    <p><a href="http://${wikipediaLinks.geonames[1].wikipediaUrl}">${wikipediaLinks.geonames[1].title}</a></p>
+    <p><a href="http://${wikipediaLinks.geonames[2].wikipediaUrl}">${wikipediaLinks.geonames[2].title}</a></p>
+    <p><a href="http://${wikipediaLinks.geonames[3].wikipediaUrl}">${wikipediaLinks.geonames[3].title}</a></p>
+    <p><a href="http://${wikipediaLinks.geonames[4].wikipediaUrl}">${wikipediaLinks.geonames[4].title}</a></p>
     <div id="loader"></div>
   `;
 }
