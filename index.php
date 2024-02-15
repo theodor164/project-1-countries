@@ -40,6 +40,22 @@
     </div>
   </div>
   
+  <!-- Modal2 -->
+<div id="myModal2" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeModal2()">&times;</span>
+    <div id="modal-content2"></div>
+  </div>
+</div>
+
+<!-- Modal3 -->
+<div id="myModal3" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeModal3()">&times;</span>
+    <div id="modal-content3"></div>
+  </div>
+</div>
+
   <script src="./scripts/geojson.js"></script>
   <script src="./scripts/leaflet.js"></script>
   <script src="./scripts/modal.js"></script>

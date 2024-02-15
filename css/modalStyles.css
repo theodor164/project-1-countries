@@ -10,7 +10,19 @@
   z-index: 2;
 }
 
-.modal-content {
+#myModal2, #myModal3 {
+  display: none;
+  position: fixed;
+  top: 50px; /* Adjust this value as needed to position the modal at the desired distance from the top */
+  left: 0;
+  width: 100%;
+  height: calc(100% - 50px); /* Adjust the height to fit the remaining space */
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 3;
+}
+
+
+.modal-content, .modal-content2 {
   background-color: #fefefe;
   margin: 5% auto; /* Changed to use auto for horizontal centering */
   padding: 20px;
