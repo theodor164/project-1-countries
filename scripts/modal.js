@@ -10,7 +10,6 @@ function fetchLocationInfo(lat, lng) {
     success: function (response) {
       // Parse OpenCage API response
       var locationInfo = JSON.parse(response);
-
       $.ajax({
         url: "./scripts/getCurrentExchangeRate.php",
         type: "GET",
@@ -64,18 +63,34 @@ function fetchLocationInfo(lat, lng) {
                             return;
                           }
                           var wikipediaLinks = JSON.parse(response);
-                          document.getElementById("loader").style.display =
-                            "none";
-                          displayLocationInfo(
-                            locationInfo,
-                            exchangeInfo,
-                            lat,
-                            lng,
-                            moreInfo,
-                            weatherInfo,
-                            weatherForecast,
-                            wikipediaLinks
-                          );
+
+                          $.ajax({
+                            url: "./scripts/getNews.php",
+                            data: {
+                              country:
+                                locationInfo.results[0].components.state,
+                            },
+                            success: function (response) {
+                              if (!response) {
+                                console.error("Empty response received.");
+                                return;
+                              }
+                              var newsLinks = JSON.parse(response);
+                              document.getElementById("loader").style.display =
+                                "none";
+                              displayLocationInfo(
+                                locationInfo,
+                                exchangeInfo,
+                                lat,
+                                lng,
+                                moreInfo,
+                                weatherInfo,
+                                weatherForecast,
+                                wikipediaLinks,
+                                newsLinks
+                              );
+                            },
+                          });
                         },
                         error: function (xhr, status, error) {
                           console.error(
@@ -124,7 +139,8 @@ function displayLocationInfo(
   moreInfo,
   weatherInfo,
   weatherForecast,
-  wikipediaLinks
+  wikipediaLinks, 
+  newsLinks
 ) {
   var infoParagraph = document.querySelector("#info");
   if (wikipediaLinks.geonames[4]) {
@@ -132,72 +148,36 @@ function displayLocationInfo(
     <p>Latitude: ${lat}</p>
     <p>Longitude: ${lng}</p>
     <p id="location-info" class="color-blue">Location Info:</p>
-    <div class="forecastContainer">
-      <div>
-        <div class="center-the-text color-blue">Weather Forecast:</div>
-        <div>Today: Highest: ${
-          weatherForecast.forecast.forecastday[0].day.maxtemp_c
-        }; Lowest: ${
-      weatherForecast.forecast.forecastday[0].day.mintemp_c
-    }.</div> 
-        <div>Tomorrow: Highest: ${
-          weatherForecast.forecast.forecastday[1].day.maxtemp_c
-        }; Lowest: ${
-      weatherForecast.forecast.forecastday[1].day.mintemp_c
-    }.</div> 
-        <div>Day After Tomorrow: Highest: ${
-          weatherForecast.forecast.forecastday[2].day.maxtemp_c
-        }; Lowest: ${
-      weatherForecast.forecast.forecastday[2].day.mintemp_c
-    }.</div> 
-      </div>
-    </div>
+    <p id="weather-forecast" class="center-the-text color-blue">Weather Forecast:</p>
     <p id="exchange-rate" class="center-the-text color-blue">Exchange Rate</p>
     
-    <div class="center-the-text color-blue">Useful Info:</div>
-    <p><a href="http://${wikipediaLinks.geonames[0].wikipediaUrl}">${
-      wikipediaLinks.geonames[0].title
-    }</a></p>
-    <p><a href="http://${wikipediaLinks.geonames[1].wikipediaUrl}">${
-      wikipediaLinks.geonames[1].title
-    }</a></p>
-    <p><a href="http://${wikipediaLinks.geonames[2].wikipediaUrl}">${
-      wikipediaLinks.geonames[2].title
-    }</a></p>
-    <p><a href="http://${wikipediaLinks.geonames[3].wikipediaUrl}">${
-      wikipediaLinks.geonames[3].title
-    }</a></p>
-    <p><a href="http://${wikipediaLinks.geonames[4].wikipediaUrl}">${
-      wikipediaLinks.geonames[4].title
-    }</a></p>
+    <p id="useful-info" class="center-the-text color-blue">Useful Info:</p>
+    <p id="news" class="center-the-text color-blue">Local News</p>
     <div id="loader"></div>
   `;
+    $("#useful-info").click(function (event) {
+      event.preventDefault();
+      var modal = $("#myModal5");
+      var modalContent = $("#modal-content5");
+      var content = `
+    <p><a href="http://${wikipediaLinks.geonames[0].wikipediaUrl}">${wikipediaLinks.geonames[0].title}</a></p>
+    <p><a href="http://${wikipediaLinks.geonames[1].wikipediaUrl}">${wikipediaLinks.geonames[1].title}</a></p>
+    <p><a href="http://${wikipediaLinks.geonames[2].wikipediaUrl}">${wikipediaLinks.geonames[2].title}</a></p>
+    <p><a href="http://${wikipediaLinks.geonames[3].wikipediaUrl}">${wikipediaLinks.geonames[3].title}</a></p>
+    <p><a href="http://${wikipediaLinks.geonames[4].wikipediaUrl}">${wikipediaLinks.geonames[4].title}</a></p>
+    `;
+
+      modalContent.html(content);
+      modal.css("display", "block");
+    });
   } else {
     infoParagraph.innerHTML = `
     <p>Latitude: ${lat}</p>
     <p>Longitude: ${lng}</p>
     <p id="location-info" class="color-blue">Location Info:</p>
-    <div class="forecastContainer">
-      <div>
-        <div class="center-the-text color-blue">Weather Forecast:</div>
-        <div>Today: Highest: ${
-          weatherForecast.forecast.forecastday[0].day.maxtemp_c
-        }; Lowest: ${
-      weatherForecast.forecast.forecastday[0].day.mintemp_c
-    }.</div> 
-        <div>Tomorrow: Highest: ${
-          weatherForecast.forecast.forecastday[1].day.maxtemp_c
-        }; Lowest: ${
-      weatherForecast.forecast.forecastday[1].day.mintemp_c
-    }.</div> 
-        <div>Day After Tomorrow: Highest: ${
-          weatherForecast.forecast.forecastday[2].day.maxtemp_c
-        }; Lowest: ${
-      weatherForecast.forecast.forecastday[2].day.mintemp_c
-    }.</div> 
-      </div>
-    </div>
+    <p id="weather-forecast" class="center-the-text color-blue">Weather Forecast:</p>
     <p id="exchange-rate" class="center-the-text color-blue">Exchange Rate</p>
+    <p id="news" class="center-the-text color-blue">Local News</p>
     `;
   }
   // When the user clicks on the location info link
@@ -215,19 +195,15 @@ function displayLocationInfo(
       <p>Population: ${moreInfo.geonames[0].population}</p>
       <p>City: ${locationInfo.results[0].components.city}</p>
       <p>Address: ${locationInfo.results[0].formatted}</p>
-      <p>Temperature: ${weatherInfo.weatherObservation.temperature}</p>
+      <p>Temperature: ${weatherInfo.weatherObservation.temperature}°C ${weatherForecast.current.condition.text} <img src="http:${weatherForecast.current.condition.icon}"></p>
       <p>Flag: ${locationInfo.results[0].annotations.flag}</p>
-      <p>Currency: ${
-        locationInfo.results[0].annotations.currency.name
-      }</p>
+      <p>Currency: ${locationInfo.results[0].annotations.currency.name}</p>
     `;
-
     // Set modal content
     modalContent.html(locationContent);
 
     // Display the modal
     modal.css("display", "block");
-    console.log("here");
   });
   $("#exchange-rate").click(function (event) {
     event.preventDefault();
@@ -251,18 +227,102 @@ function displayLocationInfo(
     `;
     // Set modal content
     modalContent.html(exchangeContent);
-    $("#currencyInput").on("input", function() {
+    $("#currencyInput").on("input", function () {
       // Get the value entered in the currencyInput field
       var currencyValue = $(this).val();
-  
+
       // Perform your calculation or fetch exchange rate here
       // For demonstration, let's assume a simple calculation
-      var exchangeRate = 1/exchangeInfo.rates[locationInfo.results[0].annotations.currency.iso_code]; // Example exchange rate
+      var exchangeRate =
+        1 /
+        exchangeInfo.rates[
+          locationInfo.results[0].annotations.currency.iso_code
+        ]; // Example exchange rate
       var result = currencyValue * exchangeRate; // Calculate the result
-  
+
       // Set the value of the exchangeResult input field to the calculated result
       $("#exchangeResult").val(result);
+    });
+    // Display the modal
+    modal.css("display", "block");
   });
+  $("#weather-forecast").click(function (event) {
+    event.preventDefault();
+    var modal = $("#myModal4");
+    var modalContent = $("#modal-content4");
+
+    var date1 = new Date(weatherForecast.forecast.forecastday[1].date);
+    var dayOfWeek1 = date1.getDay();
+    var days = [
+      "Sunday",
+      "Monday",
+      "Tuesday",
+      "Wednesday",
+      "Thursday",
+      "Friday",
+      "Saturday",
+    ];
+    var dayOfWeekString1 = days[dayOfWeek1];
+    var date2 = new Date(weatherForecast.forecast.forecastday[2].date);
+    var dayOfWeek2 = date2.getDay();
+    var dayOfWeekString2 = days[dayOfWeek2];
+
+    var weatherContent = `
+    <div class="row">
+      <div class="col-md-4">
+        <div>${locationInfo.results[0].components.city}, ${locationInfo.results[0].components.country}</div>
+      </div>
+      <div class="col-md-4" id="today-forecast">
+        <div><img src="http:${weatherForecast.forecast.forecastday[0].day.condition.icon}"><span style="font-size: 2.5rem">${weatherForecast.forecast.forecastday[0].day.maxtemp_c}</span>°C</div>
+        <div class="col-md-12">${weatherForecast.forecast.forecastday[0].day.condition.text}</div>
+      </div>
+      <div class="col-md-4">
+        <div><p>Humidity: ${weatherForecast.forecast.forecastday[0].day.avghumidity}%</p><p>Wind: ${weatherForecast.forecast.forecastday[0].day.maxwind_kph} kph</p></div>
+      </div>
+    </div> 
+    <div class="row">
+      <div class="col-md-6 row" id="tomorrow">
+        <div class="col-md-6">
+          <p>${dayOfWeekString1}:</p><p>${weatherForecast.forecast.forecastday[1].day.maxtemp_c}°C</p>
+        </div>
+        <div class="col-md-6">
+        <img src="http:${weatherForecast.forecast.forecastday[1].day.condition.icon}">
+        </div>
+      </div> 
+      <div class="col-md-6 row">
+        <div class="col-md-6">
+          <p>${dayOfWeekString2}:</p><p>${weatherForecast.forecast.forecastday[2].day.maxtemp_c}°C</p>
+        </div>
+        <div class="col-md-6">
+        <img src="http:${weatherForecast.forecast.forecastday[2].day.condition.icon}">
+        </div>
+      </div> 
+    </div>
+    `;
+
+    modalContent.html(weatherContent);
+
+    // Display the modal
+    modal.css("display", "block");
+  });
+  $("#news").click(function (event) {
+    // Prevent default link behavior
+    event.preventDefault();
+    // Get references to the modal and modal content
+    var modal = $("#myModal6");
+    var modalContent = $("#modal-content6");
+
+    // Populate modal content with location information
+    var content = `
+    <p><a href="${newsLinks.results[0].link}">${newsLinks.results[0].title}</a></p>
+    <p><a href="${newsLinks.results[1].link}">${newsLinks.results[1].title}</a></p>
+    <p><a href="${newsLinks.results[2].link}">${newsLinks.results[2].title}</a></p>
+    <p><a href="${newsLinks.results[3].link}">${newsLinks.results[3].title}</a></p>
+    <p><a href="${newsLinks.results[4].link}">${newsLinks.results[4].title}</a></p>
+    `;
+    // Set modal content
+    modalContent.html(content);
+
     // Display the modal
     modal.css("display", "block");
   });
@@ -293,6 +353,21 @@ function closeModal2() {
 
 function closeModal3() {
   var modal = document.getElementById("myModal3");
+  modal.style.display = "none";
+}
+
+function closeModal4() {
+  var modal = document.getElementById("myModal4");
+  modal.style.display = "none";
+}
+
+function closeModal5() {
+  var modal = document.getElementById("myModal5");
+  modal.style.display = "none";
+}
+
+function closeModal6() {
+  var modal = document.getElementById("myModal6");
   modal.style.display = "none";
 }
 

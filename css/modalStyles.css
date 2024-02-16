@@ -10,7 +10,7 @@
   z-index: 2;
 }
 
-#myModal2, #myModal3 {
+#myModal2, #myModal3, #myModal4, #myModal5, #myModal6 {
   display: none;
   position: fixed;
   top: 50px; /* Adjust this value as needed to position the modal at the desired distance from the top */
@@ -22,7 +22,7 @@
 }
 
 
-.modal-content, .modal-content2 {
+.modal-content {
   background-color: #fefefe;
   margin: 5% auto; /* Changed to use auto for horizontal centering */
   padding: 20px;

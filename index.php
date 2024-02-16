@@ -56,6 +56,30 @@
   </div>
 </div>
 
+<!-- Modal4 -->
+<div id="myModal4" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeModal4()">&times;</span>
+    <div id="modal-content4"></div>
+  </div>
+</div>
+
+<!-- Modal5 -->
+<div id="myModal5" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeModal5()">&times;</span>
+    <div id="modal-content5"></div>
+  </div>
+</div>
+
+<!-- Modal6 -->
+<div id="myModal6" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeModal6()">&times;</span>
+    <div id="modal-content6"></div>
+  </div>
+</div>
+
   <script src="./scripts/geojson.js"></script>
   <script src="./scripts/leaflet.js"></script>
   <script src="./scripts/modal.js"></script>

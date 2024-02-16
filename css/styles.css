@@ -33,3 +33,24 @@ body {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
 }
+
+#tomorrow {
+  border-style: none solid none none;
+}
+
+#today-forecast {
+  width: 200px;
+}
+
+@media screen and (max-width: 767px) {
+  #tomorrow {
+    border-style: none none solid none;
+  }
+
+  div, p {
+    text-align: center;
+  }
+  #today-forecast{
+    width: -webkit-fill-available;
+  }
+}
