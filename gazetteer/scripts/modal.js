@@ -1,6 +1,6 @@
 var greenIcon = L.icon({
-  iconUrl: "../marker-icons/leaf-green.png",
-  shadowUrl: "../marker-icons/leaf-shadow.png",
+  iconUrl: "./marker-icons/leaf-green.png",
+  shadowUrl: "./marker-icons/leaf-shadow.png",
   
   iconSize: [38, 95], // size of the icon
   shadowSize: [50, 64], // size of the shadow
@@ -10,8 +10,8 @@ var greenIcon = L.icon({
 });
 
 var redIcon = L.icon({
-  iconUrl: "../marker-icons/leaf-red.png",
-  shadowUrl: "../marker-icons/leaf-shadow.png",
+  iconUrl: "./marker-icons/leaf-red.png",
+  shadowUrl: "./marker-icons/leaf-shadow.png",
   
   iconSize: [38, 95], // size of the icon
   shadowSize: [50, 64], // size of the shadow
@@ -21,8 +21,8 @@ var redIcon = L.icon({
 });
 
 var orangeIcon = L.icon({
-  iconUrl: "../marker-icons/leaf-orange.png",
-  shadowUrl: "../marker-icons/leaf-shadow.png",
+  iconUrl: "./marker-icons/leaf-orange.png",
+  shadowUrl: "./marker-icons/leaf-shadow.png",
 
   iconSize: [38, 95], // size of the icon
   shadowSize: [50, 64], // size of the shadow
