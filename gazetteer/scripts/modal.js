@@ -227,7 +227,7 @@ function displayLocationInfo(
     var locationContent = `
     <p class="color-blue">Location Info:</p>
     <p>Country: ${locationInfo.results[0].components.country} / Capital city: ${moreInfo.geonames[0].capital}</p>
-    <p>Population: ${moreInfo.geonames[0].population}</p>
+    <p>Population: ${moreInfo.geonames[0].population}<img id="population-icon" src="./marker-icons/population.png" alt="population-icon"></p>
     <p>City: ${locationInfo.results[0].components.city}</p>
     <p>Address: ${locationInfo.results[0].formatted}</p>
     <p>Temperature: ${weatherInfo.weatherObservation.temperature}°C ${weatherForecast.current.condition.text} <img src="http:${weatherForecast.current.condition.icon}"></p>

@@ -14,8 +14,16 @@ $(document).ready(function () {
     // Call a function to fetch coordinates based on the selected country code
 
     fetchCoordinates(selectedCountryCode);
+
+    // Remove the previously highlighted country
+    if (highlightedLayer) {
+      map.removeLayer(highlightedLayer);
+    }
   });
 });
+
+var highlightedLayer; // Global variable to store the highlighted layer
+
 // Function to fetch coordinates based on the selected country code
 function fetchCoordinates(countryCode) {
   // Make an AJAX request to fetch the JSON data
@@ -30,12 +38,27 @@ function fetchCoordinates(countryCode) {
 
       if (selectedCountry) {
         // Swap the coordinates if needed
-        var coordinates = swapLatLongCoordinates([
-          selectedCountry.geometry.coordinates,
-        ]);
+        // if (selectedCountry.geometry.type === "Polygon") {
+        //   selectedCountry.geometry.coordinates = swapLatLongCoordinates([
+        //     selectedCountry.geometry.coordinates,
+        //   ]);
+        // } else {
+        //   selectedCountry.geometry.coordinates = swapLatLongCoordinates(
+        //     selectedCountry.geometry.coordinates
+        //   );
+        // }
+
+        highlightedLayer = L.geoJson(selectedCountry, {
+          style: {
+            fillColor: 'red',
+            fillOpacity: 0.5,
+            color: 'red',
+            weight: 2
+          }
+        }).addTo(map);
 
         // Update the map bounds
-        map.fitBounds(coordinates);
+        map.fitBounds(highlightedLayer.getBounds());
       } else {
         console.error("Selected country not found in the JSON data.");
       }

@@ -2,23 +2,23 @@
 #myModal {
   display: none;
   position: fixed;
-  top: 50px; /* Adjust this value as needed to position the modal at the desired distance from the top */
   left: 0;
   width: 100%;
-  height: calc(100% - 50px); /* Adjust the height to fit the remaining space */
+  height: 100vh; /* Adjust the height to fit the remaining space */
   background-color: rgba(0, 0, 0, 0.5);
-  z-index: 2;
+  z-index: 3;
+  top: 0px;
 }
 
 #myModal2, #myModal3, #myModal4, #myModal5, #myModal6 {
   display: none;
   position: fixed;
-  top: 50px; /* Adjust this value as needed to position the modal at the desired distance from the top */
   left: 0;
   width: 100%;
-  height: calc(100% - 50px); /* Adjust the height to fit the remaining space */
+  height: 100vh; /* Adjust the height to fit the remaining space */
   background-color: rgba(0, 0, 0, 0.5);
-  z-index: 3;
+  z-index: 4;
+  top: 0px;
 }
 
 
@@ -44,4 +44,9 @@
 
 .close:hover {
   color: black;
+}
+
+#population-icon {
+  height: 30px;
+  margin-left: 6px;
 }

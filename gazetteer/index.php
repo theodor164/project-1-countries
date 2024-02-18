@@ -24,7 +24,7 @@
 </head>
 <body>
   
-  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <nav id="navbar" class="navbar navbar-expand-lg navbar-light bg-light">
       <?php include './scripts/countries.php'; ?>
   </nav>
   
