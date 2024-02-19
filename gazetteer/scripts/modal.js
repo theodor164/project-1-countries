@@ -1,7 +1,7 @@
 var greenIcon = L.icon({
   iconUrl: "./marker-icons/leaf-green.png",
   shadowUrl: "./marker-icons/leaf-shadow.png",
-  
+
   iconSize: [38, 95], // size of the icon
   shadowSize: [50, 64], // size of the shadow
   iconAnchor: [22, 94], // point of the icon which will correspond to marker's location
@@ -12,7 +12,7 @@ var greenIcon = L.icon({
 var redIcon = L.icon({
   iconUrl: "./marker-icons/leaf-red.png",
   shadowUrl: "./marker-icons/leaf-shadow.png",
-  
+
   iconSize: [38, 95], // size of the icon
   shadowSize: [50, 64], // size of the shadow
   iconAnchor: [22, 94], // point of the icon which will correspond to marker's location
@@ -31,9 +31,10 @@ var orangeIcon = L.icon({
   popupAnchor: [-3, -76], // point from which the popup should open relative to the iconAnchor
 });
 
+var button1, button2, button3, button4;
+
 const leafs = [greenIcon, redIcon, orangeIcon];
 let leafIndex = 0;
-
 function fetchLocationInfo(lat, lng) {
   document.querySelector("#info").innerHTML = `<div id="loader"></div>`;
   document.getElementById("loader").style.display = "block";
@@ -43,6 +44,9 @@ function fetchLocationInfo(lat, lng) {
     data: { lat: lat, lng: lng },
     success: function (response) {
       // Parse OpenCage API response
+      if (!response) {
+        console.error("Empty response received.");
+      }
       var locationInfo = JSON.parse(response);
       $.ajax({
         url: "./scripts/getCurrentExchangeRate.php",
@@ -50,10 +54,9 @@ function fetchLocationInfo(lat, lng) {
         success: function (response) {
           if (!response) {
             console.error("Empty response received.");
-            return;
           }
           var exchangeInfo = JSON.parse(response);
-          
+
           $.ajax({
             url: "./scripts/getMoreInfo.php",
             type: "GET",
@@ -63,7 +66,6 @@ function fetchLocationInfo(lat, lng) {
             success: function (response) {
               if (!response) {
                 console.error("Empty response received.");
-                return;
               }
               var moreInfo = JSON.parse(response);
 
@@ -74,27 +76,24 @@ function fetchLocationInfo(lat, lng) {
                 success: function (response) {
                   if (!response) {
                     console.error("Empty response received.");
-                    return;
                   }
                   var weatherInfo = JSON.parse(response);
-                  
+
                   $.ajax({
                     url: "./scripts/getWeatherForecast.php",
                     data: { lat: lat, lng: lng },
                     success: function (response) {
                       if (!response) {
                         console.error("Empty response received.");
-                        return;
                       }
                       var weatherForecast = JSON.parse(response);
-                      
+
                       $.ajax({
                         url: "./scripts/getWikipediaLinks.php",
                         data: { city: locationInfo.results[0].components.city },
                         success: function (response) {
                           if (!response) {
                             console.error("Empty response received.");
-                            return;
                           }
                           var wikipediaLinks = JSON.parse(response);
 
@@ -102,13 +101,12 @@ function fetchLocationInfo(lat, lng) {
                             url: "./scripts/getNews.php",
                             data: {
                               country: locationInfo.results[0].components.state
-                              ? locationInfo.results[0].components.state
-                              : locationInfo.results[0].components.country,
+                                ? locationInfo.results[0].components.state
+                                : locationInfo.results[0].components.country,
                             },
                             success: function (response) {
                               if (!response) {
                                 console.error("Empty response received.");
-                                return;
                               }
                               var newsLinks = JSON.parse(response);
                               document.getElementById("loader").style.display =
@@ -132,17 +130,17 @@ function fetchLocationInfo(lat, lng) {
                             "Error fetching location info:",
                             status,
                             error
-                            );
-                          },
-                        });
-                      },
+                          );
+                        },
+                      });
+                    },
                     error: function (xhr, status, error) {
                       console.error(
                         "Error fetching location info:",
                         status,
                         error
-                        );
-                      },
+                      );
+                    },
                   });
                 },
                 error: function (xhr, status, error) {
@@ -176,10 +174,10 @@ function displayLocationInfo(
   weatherForecast,
   wikipediaLinks,
   newsLinks
-  ) {
-    var infoParagraph = document.querySelector("#info");
-    if (wikipediaLinks.geonames[4]) {
-      infoParagraph.innerHTML = `
+) {
+  var infoParagraph = document.querySelector("#info");
+  if (wikipediaLinks.geonames[4]) {
+    infoParagraph.innerHTML = `
       <p>Latitude: ${lat}</p>
       <p>Longitude: ${lng}</p>
       <p id="location-info" class="color-blue">Location Info:</p>
@@ -190,7 +188,7 @@ function displayLocationInfo(
       <p id="news" class="center-the-text color-blue">Local News</p>
       <div id="loader"></div>
   `;
-  $("#useful-info").click(function (event) {
+    $("#useful-info").click(function (event) {
       event.preventDefault();
       var modal = $("#myModal5");
       var modalContent = $("#modal-content5");
@@ -201,7 +199,7 @@ function displayLocationInfo(
       <p><a href="http://${wikipediaLinks.geonames[3].wikipediaUrl}">${wikipediaLinks.geonames[3].title}</a></p>
       <p><a href="http://${wikipediaLinks.geonames[4].wikipediaUrl}">${wikipediaLinks.geonames[4].title}</a></p>
       `;
-      
+
       modalContent.html(content);
       modal.css("display", "block");
     });
@@ -222,7 +220,7 @@ function displayLocationInfo(
     // Get references to the modal and modal content
     var modal = $("#myModal2");
     var modalContent = $("#modal-content2");
-    
+
     // Populate modal content with location information
     var locationContent = `
     <p class="color-blue">Location Info:</p>
@@ -236,7 +234,7 @@ function displayLocationInfo(
     `;
     // Set modal content
     modalContent.html(locationContent);
-    
+
     // Display the modal
     modal.css("display", "block");
   });
@@ -244,7 +242,7 @@ function displayLocationInfo(
     event.preventDefault();
     var modal = $("#myModal3");
     var modalContent = $("#modal-content3");
-    
+
     var exchangeContent = `
     <p class="color-blue">Currency Calculator</p>
     <div class="row">
@@ -265,16 +263,16 @@ function displayLocationInfo(
     $("#currencyInput").on("input", function () {
       // Get the value entered in the currencyInput field
       var currencyValue = $(this).val();
-      
+
       // Perform your calculation or fetch exchange rate here
       // For demonstration, let's assume a simple calculation
       var exchangeRate =
-      1 /
-      exchangeInfo.rates[
-        locationInfo.results[0].annotations.currency.iso_code
-      ]; // Example exchange rate
+        1 /
+        exchangeInfo.rates[
+          locationInfo.results[0].annotations.currency.iso_code
+        ]; // Example exchange rate
       var result = currencyValue * exchangeRate; // Calculate the result
-      
+
       // Set the value of the exchangeResult input field to the calculated result
       $("#exchangeResult").val(result);
     });
@@ -285,7 +283,7 @@ function displayLocationInfo(
     event.preventDefault();
     var modal = $("#myModal4");
     var modalContent = $("#modal-content4");
-    
+
     var date1 = new Date(weatherForecast.forecast.forecastday[1].date);
     var dayOfWeek1 = date1.getDay();
     var days = [
@@ -301,7 +299,7 @@ function displayLocationInfo(
     var date2 = new Date(weatherForecast.forecast.forecastday[2].date);
     var dayOfWeek2 = date2.getDay();
     var dayOfWeekString2 = days[dayOfWeek2];
-    
+
     var weatherContent = `
     <div class="row">
       <div class="col-md-4">
@@ -334,19 +332,19 @@ function displayLocationInfo(
         </div> 
         </div>
         `;
-        
-        modalContent.html(weatherContent);
-        
-        // Display the modal
-        modal.css("display", "block");
-      });
+
+    modalContent.html(weatherContent);
+
+    // Display the modal
+    modal.css("display", "block");
+  });
   $("#news").click(function (event) {
     // Prevent default link behavior
     event.preventDefault();
     // Get references to the modal and modal content
     var modal = $("#myModal6");
     var modalContent = $("#modal-content6");
-    
+
     // Populate modal content with location information
     var content = `
     <p><a href="${newsLinks.results[0].link}">${newsLinks.results[0].title}</a></p>
@@ -357,7 +355,7 @@ function displayLocationInfo(
     `;
     // Set modal content
     modalContent.html(content);
-    
+
     // Display the modal
     modal.css("display", "block");
   });
@@ -365,7 +363,7 @@ function displayLocationInfo(
 
 // Function to handle the onchange event of the country selection input
 function handleCountrySelection() {
-  var selectedCountry = $("#countrySelect option:selected").html(); 
+  var selectedCountry = $("#countrySelect option:selected").html();
 
   // Send AJAX request to get more information based on the selected country
   $.ajax({
@@ -377,15 +375,14 @@ function handleCountrySelection() {
     success: function (response) {
       if (!response) {
         console.error("Empty response received.");
-        return;
       }
       var moreInfo = JSON.parse(response);
-      
+
       // Remove existing markers
       removeAllMarkers();
-      
+
       // Add markers for the location information of the selected country
-      moreInfo.geonames.forEach(function(location) {
+      moreInfo.geonames.forEach(function (location) {
         var marker = L.marker([location.lat, location.lng], {
           icon: leafs[leafIndex % 3], // Assuming you have an array of leaf icons
         });
@@ -393,13 +390,14 @@ function handleCountrySelection() {
         marker.bindPopup(`Location: ${location.name}`); // Customize popup content as needed
         selectedPinsCluster.addLayer(marker);
       });
-      
+
       // Add the marker cluster group to the map
       map.addLayer(selectedPinsCluster);
+      fetchLocationInformation(selectedCountry);
     },
     error: function (xhr, status, error) {
       console.error("Error fetching more information:", error);
-    }
+    },
   });
 }
 
@@ -411,18 +409,17 @@ var selectedPinsCluster = L.markerClusterGroup();
 function onMapClick(e) {
   var modal = document.getElementById("myModal");
   modal.style.display = "block";
-  
+
   let marker = L.marker([e.latlng.lat, e.latlng.lng], {
     icon: leafs[leafIndex % 3],
   });
   marker.bindPopup(`lat: ${e.latlng.lat}, lng: ${e.latlng.lng}`);
   selectedPinsCluster.addLayer(marker);
   map.addLayer(selectedPinsCluster);
-  
+
   fetchLocationInfo(e.latlng.lat, e.latlng.lng);
   leafIndex++;
 }
-
 
 map.on("click", onMapClick);
 
@@ -435,6 +432,200 @@ function removeAllMarkers() {
 L.easyButton('<i class="fas fa-trash-alt"></i>', function (btn, map) {
   removeAllMarkers();
 }).addTo(map);
+
+function fetchLocationInformation(country) {
+  $.ajax({
+    url: "./scripts/getLocationInfoCountry.php",
+    type: "GET",
+    data: { country: country },
+    success: function (response) {
+      if (!response) {
+        console.error("Empty response received.");
+      }
+      var locationInfo = JSON.parse(response);
+      $.ajax({
+        url: "./scripts/getMoreInfo.php",
+        type: "GET",
+        data: {
+          country: locationInfo.results[0].components["ISO_3166-1_alpha-2"],
+        },
+        success: function (response) {
+          if (!response) {
+            console.error("Empty response received.");
+          }
+          var moreInfo = JSON.parse(response);
+
+          $.ajax({
+            url: "./scripts/getCurrentExchangeRate.php",
+            type: "GET",
+            success: function (response) {
+              if (!response) {
+                console.error("Empty response received.");
+              }
+              var exchangeInfo = JSON.parse(response);
+
+              $.ajax({
+                url: "./scripts/getWikipediaLinks.php",
+                data: { city: locationInfo.results[0].components.country },
+                success: function (response) {
+                  if (!response) {
+                    console.error("Empty response received.");
+                  }
+                  var wikipediaLinks = JSON.parse(response);
+                  $.ajax({
+                    url: "./scripts/getNews.php",
+                    data: {
+                      country: locationInfo.results[0].components.state
+                        ? locationInfo.results[0].components.state
+                        : locationInfo.results[0].components.country,
+                    },
+                    success: function (response) {
+                      if (!response) {
+                        console.error("Empty response received.");
+                      }
+                      var newsLinks = JSON.parse(response);
+                      if (button1) button1.remove();
+                      if (button2) button2.remove();
+                      if (button3) button3.remove();
+                      if (button4) button4.remove();
+                      button1 = L.easyButton(
+                        '<i class="fa-solid fa-circle-info"></i>',
+                        function (btn, map) {
+                          var modal = $("#myModal2");
+                          var modalContent = $("#modal-content2");
+
+                          // Populate modal content with location information
+                          var locationContent = `
+                      <p class="color-blue">Location Info:</p>
+                      <p>Country: ${locationInfo.results[0].components.country} / Capital city: ${moreInfo.geonames[0].capital}</p>
+                      <p>Population: ${moreInfo.geonames[0].population}<img id="population-icon" src="./marker-icons/population.png" alt="population-icon"></p>
+                      <p>City: ${locationInfo.results[0].components.city}</p>
+                      <p>Address: ${locationInfo.results[0].formatted}</p>
+                      <p>Flag: ${locationInfo.results[0].annotations.flag}</p>
+                      <p>Currency: ${locationInfo.results[0].annotations.currency.name}</p>
+                      `;
+                          // Set modal content
+                          modalContent.html(locationContent);
+
+                          // Display the modal
+                          modal.css("display", "block");
+                        }
+                      ).addTo(map);
+                      button2 = L.easyButton(
+                        '<i class="fas fa-dollar-sign"></i>',
+                        function (btn, map) {
+                          var modal = $("#myModal3");
+                          var modalContent = $("#modal-content3");
+
+                          var exchangeContent = `
+    <p class="color-blue">Currency Calculator</p>
+    <div class="row">
+    <div class="col-md-6">
+    <label for="currencyInput">Currency:</label>
+    <input type="text" id="currencyInput" class="form-control" placeholder="Enter currency">
+    ${locationInfo.results[0].annotations.currency.iso_code}
+    </div>
+    <div class="col-md-6">
+    <label for="exchangeResult">Exchange Result:</label>
+    <input type="text" id="exchangeResult" class="form-control" readonly>
+    USD
+    </div>
+    </div>
+    `;
+                          // Set modal content
+                          modalContent.html(exchangeContent);
+                          $("#currencyInput").on("input", function () {
+                            // Get the value entered in the currencyInput field
+                            var currencyValue = $(this).val();
+
+                            // Perform your calculation or fetch exchange rate here
+                            // For demonstration, let's assume a simple calculation
+                            var exchangeRate =
+                              1 /
+                              exchangeInfo.rates[
+                                locationInfo.results[0].annotations.currency
+                                  .iso_code
+                              ]; // Example exchange rate
+                            var result = currencyValue * exchangeRate; // Calculate the result
+
+                            // Set the value of the exchangeResult input field to the calculated result
+                            $("#exchangeResult").val(result);
+                          });
+                          // Display the modal
+                          modal.css("display", "block");
+                        }
+                      ).addTo(map);
+
+                      button3 = L.easyButton(
+                        '<i class="fa-brands fa-wikipedia-w"></i>',
+                        function (btn, map) {
+                          var modal = $("#myModal5");
+                          var modalContent = $("#modal-content5");
+                          var content = `
+                          <p id="useful-info" class="center-the-text color-blue">Useful Info:</p>
+      <p><a href="http://${wikipediaLinks.geonames[0].wikipediaUrl}">${wikipediaLinks.geonames[0].title}</a></p>
+      <p><a href="http://${wikipediaLinks.geonames[1].wikipediaUrl}">${wikipediaLinks.geonames[1].title}</a></p>
+      <p><a href="http://${wikipediaLinks.geonames[2].wikipediaUrl}">${wikipediaLinks.geonames[2].title}</a></p>
+      <p><a href="http://${wikipediaLinks.geonames[3].wikipediaUrl}">${wikipediaLinks.geonames[3].title}</a></p>
+      <p><a href="http://${wikipediaLinks.geonames[4].wikipediaUrl}">${wikipediaLinks.geonames[4].title}</a></p>
+      `;
+
+                          modalContent.html(content);
+                          modal.css("display", "block");
+                        }
+                      ).addTo(map);
+                      button4 = L.easyButton(
+                        '<i class="fa-solid fa-newspaper"></i>',
+                        function (btn, map) {
+                          // Get references to the modal and modal content
+                          var modal = $("#myModal6");
+                          var modalContent = $("#modal-content6");
+
+                          // Populate modal content with location information
+                          var content = `
+<p><a href="${newsLinks.results[0].link}">${newsLinks.results[0].title}</a></p>
+<p><a href="${newsLinks.results[1].link}">${newsLinks.results[1].title}</a></p>
+<p><a href="${newsLinks.results[2].link}">${newsLinks.results[2].title}</a></p>
+<p><a href="${newsLinks.results[3].link}">${newsLinks.results[3].title}</a></p>
+<p><a href="${newsLinks.results[4].link}">${newsLinks.results[4].title}</a></p>
+`;
+                          // Set modal content
+                          modalContent.html(content);
+
+                          // Display the modal
+                          modal.css("display", "block");
+                        }
+                      ).addTo(map);
+                    },
+                    error: function (xhr, status, error) {
+                      console.error(
+                        "Error fetching location info:",
+                        status,
+                        error
+                      );
+                    },
+                  });
+                },
+                error: function (xhr, status, error) {
+                  console.error("Error fetching location info:", status, error);
+                },
+              });
+            },
+            error: function (xhr, status, error) {
+              console.error("Error fetching location info:", status, error);
+            },
+          });
+        },
+        error: function (xhr, status, error) {
+          console.error("Error fetching location info:", status, error);
+        },
+      });
+    },
+    error: function (xhr, status, error) {
+      console.error("Error fetching location info:", status, error);
+    },
+  });
+}
 
 // Function to close the modal
 function closeModal() {

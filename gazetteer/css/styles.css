@@ -3,13 +3,17 @@
   text-align: center;
 }
 
-#navbar{
+#navbar {
   z-index: 2;
   width: 300px;
   margin-left: auto;
   margin-right: auto;
   padding: 0;
   margin-top: 10px;
+}
+
+#countrySelect {
+  margin-right: 0px !important;
 }
 
 .center-the-text {

@@ -3,8 +3,10 @@
 
 $city = $_GET['city'];
 
+// Encode the country name
+$encodedCity = urlencode($city);
 
-$apiUrl = "http://api.geonames.org/wikipediaSearchJSON?q={$city}&maxRows=5&username=theodor164";
+$apiUrl = "http://api.geonames.org/wikipediaSearchJSON?q={$encodedCity}&maxRows=5&username=theodor164";
 
 
 $response = file_get_contents($apiUrl);

@@ -1,4 +1,5 @@
 var data = window.geojsonData;
+var highlightedLayer; // Global variable to store the highlighted layer
 
 function swapLatLongCoordinates(coordinates) {
   return coordinates.map((area) =>
@@ -11,18 +12,15 @@ $(document).ready(function () {
   $("#countrySelect").on("change", function () {
     var selectedCountryCode = $(this).val();
 
-    // Call a function to fetch coordinates based on the selected country code
-
-    fetchCoordinates(selectedCountryCode);
-
     // Remove the previously highlighted country
     if (highlightedLayer) {
       map.removeLayer(highlightedLayer);
+      highlightedLayer = null;
     }
+    // Call a function to fetch coordinates based on the selected country code
+    fetchCoordinates(selectedCountryCode);
   });
 });
-
-var highlightedLayer; // Global variable to store the highlighted layer
 
 // Function to fetch coordinates based on the selected country code
 function fetchCoordinates(countryCode) {
@@ -48,17 +46,19 @@ function fetchCoordinates(countryCode) {
         //   );
         // }
 
-        highlightedLayer = L.geoJson(selectedCountry, {
-          style: {
-            fillColor: 'red',
-            fillOpacity: 0.5,
-            color: 'red',
-            weight: 2
-          }
-        }).addTo(map);
+        if (!highlightedLayer) {
+          highlightedLayer = L.geoJson(selectedCountry, {
+            style: {
+              fillColor: "red",
+              fillOpacity: 0.1,
+              color: "red",
+              weight: 2,
+            },
+          }).addTo(map);
 
-        // Update the map bounds
-        map.fitBounds(highlightedLayer.getBounds());
+          // Update the map bounds
+          map.fitBounds(highlightedLayer.getBounds());
+        }
       } else {
         console.error("Selected country not found in the JSON data.");
       }
@@ -163,9 +163,9 @@ function showPosition(position) {
       fetchCoordinates(
         locationInfo.results[0].components["ISO_3166-1_alpha-2"]
       );
-      $("#countrySelect").val(
-        locationInfo.results[0].components["ISO_3166-1_alpha-2"]
-      );
+      $("#countrySelect")
+        .val(locationInfo.results[0].components["ISO_3166-1_alpha-2"])
+        .trigger("change");
     },
     error: function (xhr, status, error) {
       console.error("Error fetching location info:", status, error);
