@@ -1,116 +1,202 @@
 var selectedPinsCluster = L.markerClusterGroup();
-// Define separate layer groups for different categories of markers
+// Define separate marker cluster groups for different categories of markers
 var airportLayer = L.markerClusterGroup();
 var cityLayer = L.markerClusterGroup();
 var universityLayer = L.markerClusterGroup();
 var stadiumLayer = L.markerClusterGroup();
 
-// Add layer groups to the Layer Control
+// Add marker cluster groups to the Layer Control
 layerControl.addOverlay(airportLayer, "Airports");
 layerControl.addOverlay(cityLayer, "Cities");
 layerControl.addOverlay(universityLayer, "Universities");
 layerControl.addOverlay(stadiumLayer, "Stadiums");
 
-document
-  .querySelector(
-    "#map > div.leaflet-control-container > div.leaflet-top.leaflet-right > div > section > div.leaflet-control-layers-overlays > label:nth-child(1) > span > input"
-  )
-  .setAttribute("id", "airportsCheckbox");
-document
-  .querySelector(
-    "#map > div.leaflet-control-container > div.leaflet-top.leaflet-right > div > section > div.leaflet-control-layers-overlays > label:nth-child(2) > span > input"
-  )
-  .setAttribute("id", "citiesCheckbox");
-document
-  .querySelector(
-    "#map > div.leaflet-control-container > div.leaflet-top.leaflet-right > div > section > div.leaflet-control-layers-overlays > label:nth-child(3) > span > input"
-  )
-  .setAttribute("id", "universitiesCheckbox");
-document
-  .querySelector(
-    "#map > div.leaflet-control-container > div.leaflet-top.leaflet-right > div > section > div.leaflet-control-layers-overlays > label:nth-child(4) > span > input"
-  )
-  .setAttribute("id", "stadiumsCheckbox");
+// Set IDs for the checkboxes
+$(
+  "#map > div.leaflet-control-container > div.leaflet-top.leaflet-right > div > section > div.leaflet-control-layers-overlays > label:nth-child(1) > span > input"
+).attr("id", "airportsCheckbox");
+$(
+  "#map > div.leaflet-control-container > div.leaflet-top.leaflet-right > div > section > div.leaflet-control-layers-overlays > label:nth-child(2) > span > input"
+).attr("id", "citiesCheckbox");
+$(
+  "#map > div.leaflet-control-container > div.leaflet-top.leaflet-right > div > section > div.leaflet-control-layers-overlays > label:nth-child(3) > span > input"
+).attr("id", "universitiesCheckbox");
+$(
+  "#map > div.leaflet-control-container > div.leaflet-top.leaflet-right > div > section > div.leaflet-control-layers-overlays > label:nth-child(4) > span > input"
+).attr("id", "stadiumsCheckbox");
 
-  $(document).ready(function() {
-    // Event listener for the airports checkbox
-    $("#airportsCheckbox").change(function() {
-        // Check if the checkbox is checked
-        var showAirports = $(this).is(":checked");
-  
-        // If checkbox is checked, add airport markers
-        if (showAirports) {
-          // Call the handleCountrySelection function to fetch and display airport markers
-          handleCountrySelection();
-        } else {
-          // If checkbox is unchecked, remove airport markers
-          airportLayer.clearLayers();
-        }
+// Event listener for the checkboxes
+$(document).ready(function () {
+  $("#airportsCheckbox").change(function () {
+    handleCheckboxChange(
+      airportLayer,
+      "./scripts/getCountryAirports.php",
+      "#airportsCheckbox",
+      'Airports'
+    );
+  });
+
+  $("#citiesCheckbox").change(function () {
+    handleCheckboxChange(
+      cityLayer,
+      "./scripts/getCountryCities.php",
+      "#citiesCheckbox",
+      'Cities'
+    );
+  });
+
+  $("#universitiesCheckbox").change(function () {
+    handleCheckboxChange(
+      universityLayer,
+      "./scripts/getCountryUniversities.php",
+      "#universitiesCheckbox",
+      'Universities'
+    );
+  });
+
+  $("#stadiumsCheckbox").change(function () {
+    handleCheckboxChange(
+      stadiumLayer,
+      "./scripts/getCountryStadiums.php",
+      "#stadiumsCheckbox",
+      'Stadiums'
+    );
+  });
+
+  $("#countrySelect").change(function () {
+    handleCountrySelection();
+  });
+});
+
+// Function to handle checkbox change
+function handleCheckboxChange(layer, scriptUrl, id, layerName) {
+  var isChecked = $(id).is(":checked");
+  if (isChecked) {
+    // Call the function to fetch and display markers
+    handleCountrySelection2(layer, scriptUrl, layerName);
+  } else {
+    // If checkbox is unchecked, remove markers
+    layer.clearLayers();
+  }
+}
+
+function handleCountrySelection() {
+  var selectedCountryFull = $("#countrySelect option:selected").html();
+  fetchLocationInformation(selectedCountryFull);
+
+  handleCheckboxChange(
+    airportLayer,
+    "./scripts/getCountryAirports.php",
+    "#airportsCheckbox",
+    'Airports'
+  );
+  handleCheckboxChange(
+    cityLayer,
+    "./scripts/getCountryCities.php",
+    "#citiesCheckbox",
+    'Cities'
+  );
+  handleCheckboxChange(
+    universityLayer,
+    "./scripts/getCountryUniversities.php",
+    "#universitiesCheckbox",
+    'Universities'
+  );
+  handleCheckboxChange(
+    stadiumLayer,
+    "./scripts/getCountryStadiums.php",
+    "#stadiumsCheckbox",
+    'Stadiums'
+  );
+}
+
+// Function to handle country selection
+function handleCountrySelection2(layer, scriptUrl, layerName) {
+  var selectedCountry = $("#countrySelect").val();
+  var selectedCountryFull = $("#countrySelect option:selected").html();
+  // removeAllMarkers();
+
+  // Send AJAX request to get marker information based on the selected country
+  $.ajax({
+    url: scriptUrl,
+    type: "GET",
+    data: {
+      country: selectedCountry,
+      countryFull: selectedCountryFull, // Pass selectedCountryFull as parameter
+    },
+    success: function (response) {
+      if (!response) {
+        console.error("Empty response received.");
+      }
+      var markerInfo = JSON.parse(response);
+      // Add or remove markers based on the checkbox state
+      addMarkers(layer, markerInfo, layerName);
+    
+    },
+    error: function (xhr, status, error) {
+      console.error("Error fetching marker information:", error);
+    },
+  });
+}
+
+// Function to add markers to the layer
+function addMarkers(layer, markerInfo, layerName) {
+  layer.clearLayers(); // Clear existing markers
+  // Add markers for the location information
+  markerInfo.geonames.forEach(function (location) {
+    var marker = L.marker([location.lat, location.lng], {
+      icon: getMarkerIcon(layerName),
     });
-  
-    // Event listener for the country select input
-    $("#countrySelect").change(function() {
-      // When the country selection changes, fetch and display information based on the selected country
-      handleCountrySelection();
-    });
+    marker.bindPopup(`Location: ${location.name}`);
+    layer.addLayer(marker);
   });
   
-  // Function to handle the onchange event of the country selection input
-  function handleCountrySelection() {
-    var selectedCountry = $("#countrySelect").val();
-    var selectedCountryFull = $("#countrySelect option:selected").html();
-    removeAllMarkers();
-    fetchLocationInformation(selectedCountryFull);
-      
-    // Send AJAX request to get airport information based on the selected country
-    $.ajax({
-      url: "./scripts/getCountryAirports.php",
-      type: "GET",
-      data: {
-        country: selectedCountry,
-      },
-      success: function (response) {
-        if (!response) {
-          console.error("Empty response received.");
-        }
-        var airportInfo = JSON.parse(response);
-  
-        // Add or remove airport markers based on the checkbox state
-        if ($("#airportsCheckbox").is(":checked")) {
-          addAirportMarkers(airportInfo);
-        } else {
-          airportLayer.clearLayers();
-        }
-      },
-      error: function (xhr, status, error) {
-        console.error("Error fetching airport information:", error);
-      },
-    });
+  // Add the layer to the map
+  map.addLayer(layer);
+}
+
+// Function to get marker icon based on the category
+function getMarkerIcon(category) {
+  // Customize icon based on category
+  if (category === "Airports") {
+    return airportMarker;
+  } else if (category === "Cities") {
+    return cityMarker;
+  } else if (category === "Universities") {
+    return universityMarker;
+  } else if (category === "Stadiums") {
+    return stadiumMarker;
   }
-  
-  // Function to add airport markers to the airportLayer
-  function addAirportMarkers(airportInfo) {
-    airportLayer.clearLayers(); // Clear existing markers
-    
-    // Add markers for the location information of the selected country
-    airportInfo.geonames.forEach(function (location) {
-      var marker = L.marker([location.lat, location.lng], {
-        icon: airportMarker,
-      });
-      marker.bindPopup(`Location: ${location.name}`);
-      airportLayer.addLayer(marker);
-    });
-  
-    // Add the airportLayer to the map
-    map.addLayer(airportLayer);
-  }
+}
 
 // Creates a red marker with the coffee icon
 var airportMarker = L.ExtraMarkers.icon({
-  icon: 'fa-solid fa-plane',
-  iconColor: 'blue',
-  shape: 'square',
-  prefix: 'fa'
+  icon: "fa-solid fa-plane",
+  iconColor: "blue",
+  shape: "square",
+  prefix: "fa",
+});
+
+// Create other marker icons for different categories as needed
+var cityMarker = L.ExtraMarkers.icon({
+  icon: "fa-solid fa-building",
+  iconColor: "green",
+  shape: "square",
+  prefix: "fa",
+});
+
+var universityMarker = L.ExtraMarkers.icon({
+  icon: "fa-solid fa-university",
+  iconColor: "orange",
+  shape: "square",
+  prefix: "fa",
+});
+
+var stadiumMarker = L.ExtraMarkers.icon({
+  icon: "fas fa-futbol",
+  iconColor: "purple",
+  shape: "square",
+  prefix: "fa",
 });
 
 var greenIcon = L.icon({
@@ -127,7 +213,7 @@ var greenIcon = L.icon({
 var redIcon = L.icon({
   iconUrl: "./marker-icons/leaf-red.png",
   shadowUrl: "./marker-icons/leaf-shadow.png",
-  
+
   iconSize: [38, 95], // size of the icon
   shadowSize: [50, 64], // size of the shadow
   iconAnchor: [22, 94], // point of the icon which will correspond to marker's location
@@ -138,7 +224,7 @@ var redIcon = L.icon({
 var orangeIcon = L.icon({
   iconUrl: "./marker-icons/leaf-orange.png",
   shadowUrl: "./marker-icons/leaf-shadow.png",
-  
+
   iconSize: [38, 95], // size of the icon
   shadowSize: [50, 64], // size of the shadow
   iconAnchor: [22, 94], // point of the icon which will correspond to marker's location
@@ -477,7 +563,6 @@ function displayLocationInfo(
 }
 
 // Add an onchange event listener to the country selection input
-
 
 function onMapClick(e) {
   var modal = document.getElementById("myModal");

@@ -2,9 +2,11 @@
 
 // Get latitude and longitude from the AJAX request
 $country = $_GET['country'];
-$countryFull = $_GET['countryFull']
+$countryFull = $_GET['countryFull'];
 
-$apiUrl = "http://api.geonames.org/searchJSON?q={$countryFull}&maxRows=30&username=theodor164&country={$country}";
+$encodedCountry = urlencode($countryFull);
+
+$apiUrl = "http://api.geonames.org/searchJSON?q={$encodedCountry}&maxRows=30&username=theodor164&country={$country}";
 
 $response = file_get_contents($apiUrl);
 
