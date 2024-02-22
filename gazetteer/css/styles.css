@@ -21,8 +21,9 @@
 }
 
 .color-blue {
-  background-color: #3498db;
+  background-color: red;
   cursor: pointer;
+  color: white;
 }
 
 body {

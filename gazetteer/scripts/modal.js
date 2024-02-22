@@ -674,7 +674,7 @@ function fetchLocationInformation(country) {
 
                               // Populate modal content with location information
                               var locationContent = `
-                            <p class="color-blue">Location Info:</p>
+                            <p class="color-blue center-the-text">Location Info:</p>
                             <p><i class="fa-solid fa-earth-americas"></i>Country: ${locationInfo.results[0].components.country} / <i class="fa-solid fa-city"></i>Capital city: ${moreInfo.geonames[0].capital}</p>
                             <p><i class="fa-solid fa-person"></i>Population: ${moreInfo.geonames[0].population}<img id="population-icon" src="./marker-icons/population.png" alt="population-icon"></p>
                             <p><i class="fa-solid fa-address-book"></i>Address: ${locationInfo.results[0].formatted}</p>
@@ -695,7 +695,7 @@ function fetchLocationInformation(country) {
                               var modalContent = $("#modal-content3");
 
                               var exchangeContent = `
-          <p class="color-blue">Currency Calculator</p>
+          <p class="color-blue center-the-text">Currency Calculator</p>
           <div class="row">
           <div class="col-md-6">
           <label for="currencyInput">Currency:</label>
@@ -760,6 +760,7 @@ function fetchLocationInformation(country) {
 
                               // Populate modal content with location information
                               var content = `
+                              <p class="center-the-text color-blue">News:</p>
       <p><a href="${newsLinks.results[0].link}">${newsLinks.results[0].title}</a></p>
       <p><a href="${newsLinks.results[1].link}">${newsLinks.results[1].title}</a></p>
       <p><a href="${newsLinks.results[2].link}">${newsLinks.results[2].title}</a></p>
@@ -800,6 +801,7 @@ function fetchLocationInformation(country) {
                               var dayOfWeekString2 = days[dayOfWeek2];
 
                               var weatherContent = `
+                              <p class="color-blue center-the-text">Weather forecast</p>
                               <div class="row">
                                 <div class="col-md-4">
                                 <div>${moreInfo.geonames[0].capital}, ${locationInfo.results[0].components.country}</div>

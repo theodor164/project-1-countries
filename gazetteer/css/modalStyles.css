@@ -22,14 +22,14 @@
 }
 
 
-.modal-content {
+div .modal-content {
   background-color: #fefefe;
   margin: 5% auto; /* Changed to use auto for horizontal centering */
   padding: 20px;
   border: 1px solid #888;
-  width: calc(80% - 40px); /* Calculate width considering padding */
   display: flex;
-  flex-direction: row;
+  width: max-content;
+  flex-direction: column;
   justify-content: space-between;
   align-items: center;
 }
