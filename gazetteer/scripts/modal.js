@@ -595,6 +595,10 @@ L.easyButton('<i class="fas fa-trash-alt"></i>', function (btn, map) {
 }).addTo(map);
 
 function fetchLocationInformation(country) {
+  var modal = document.getElementById("myModal");
+  modal.style.display = "block";
+  document.querySelector("#info").innerHTML = `<div id="loader"></div>`;
+  document.getElementById("loader").style.display = "block";
   $.ajax({
     url: "./scripts/getLocationInfoCountry.php",
     type: "GET",
@@ -659,6 +663,9 @@ function fetchLocationInformation(country) {
                           if (button3) button3.remove();
                           if (button4) button4.remove();
                           if (button5) button5.remove();
+                          document.getElementById("loader").style.display =
+                            "none";
+                          modal.style.display = "none";
                           button1 = L.easyButton(
                             '<i class="fa-solid fa-circle-info"></i>',
                             function (btn, map) {
