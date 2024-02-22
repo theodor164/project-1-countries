@@ -32,7 +32,7 @@ $(document).ready(function () {
       airportLayer,
       "./scripts/getCountryAirports.php",
       "#airportsCheckbox",
-      'Airports'
+      "Airports"
     );
   });
 
@@ -41,7 +41,7 @@ $(document).ready(function () {
       cityLayer,
       "./scripts/getCountryCities.php",
       "#citiesCheckbox",
-      'Cities'
+      "Cities"
     );
   });
 
@@ -50,7 +50,7 @@ $(document).ready(function () {
       universityLayer,
       "./scripts/getCountryUniversities.php",
       "#universitiesCheckbox",
-      'Universities'
+      "Universities"
     );
   });
 
@@ -59,7 +59,7 @@ $(document).ready(function () {
       stadiumLayer,
       "./scripts/getCountryStadiums.php",
       "#stadiumsCheckbox",
-      'Stadiums'
+      "Stadiums"
     );
   });
 
@@ -88,25 +88,25 @@ function handleCountrySelection() {
     airportLayer,
     "./scripts/getCountryAirports.php",
     "#airportsCheckbox",
-    'Airports'
+    "Airports"
   );
   handleCheckboxChange(
     cityLayer,
     "./scripts/getCountryCities.php",
     "#citiesCheckbox",
-    'Cities'
+    "Cities"
   );
   handleCheckboxChange(
     universityLayer,
     "./scripts/getCountryUniversities.php",
     "#universitiesCheckbox",
-    'Universities'
+    "Universities"
   );
   handleCheckboxChange(
     stadiumLayer,
     "./scripts/getCountryStadiums.php",
     "#stadiumsCheckbox",
-    'Stadiums'
+    "Stadiums"
   );
 }
 
@@ -131,7 +131,6 @@ function handleCountrySelection2(layer, scriptUrl, layerName) {
       var markerInfo = JSON.parse(response);
       // Add or remove markers based on the checkbox state
       addMarkers(layer, markerInfo, layerName);
-    
     },
     error: function (xhr, status, error) {
       console.error("Error fetching marker information:", error);
@@ -150,7 +149,7 @@ function addMarkers(layer, markerInfo, layerName) {
     marker.bindPopup(`Location: ${location.name}`);
     layer.addLayer(marker);
   });
-  
+
   // Add the layer to the map
   map.addLayer(layer);
 }
@@ -232,7 +231,7 @@ var orangeIcon = L.icon({
   popupAnchor: [-3, -76], // point from which the popup should open relative to the iconAnchor
 });
 
-var button1, button2, button3, button4;
+var button1, button2, button3, button4, button5;
 
 const leafs = [greenIcon, redIcon, orangeIcon];
 let leafIndex = 0;
@@ -646,117 +645,201 @@ function fetchLocationInformation(country) {
                         console.error("Empty response received.");
                       }
                       var newsLinks = JSON.parse(response);
-                      if (button1) button1.remove();
-                      if (button2) button2.remove();
-                      if (button3) button3.remove();
-                      if (button4) button4.remove();
-                      button1 = L.easyButton(
-                        '<i class="fa-solid fa-circle-info"></i>',
-                        function (btn, map) {
-                          var modal = $("#myModal2");
-                          var modalContent = $("#modal-content2");
+                      $.ajax({
+                        url: "./scripts/getWeatherForecastCity.php",
+                        type: "GET",
+                        data: { city: moreInfo.geonames[0].capital },
+                        success: function (response) {
+                          if (!response) {
+                            console.error("Empty response received.");
+                          }
+                          var weatherForecastCity = JSON.parse(response);
+                          if (button1) button1.remove();
+                          if (button2) button2.remove();
+                          if (button3) button3.remove();
+                          if (button4) button4.remove();
+                          if (button5) button5.remove();
+                          button1 = L.easyButton(
+                            '<i class="fa-solid fa-circle-info"></i>',
+                            function (btn, map) {
+                              var modal = $("#myModal2");
+                              var modalContent = $("#modal-content2");
 
-                          // Populate modal content with location information
-                          var locationContent = `
-                      <p class="color-blue">Location Info:</p>
-                      <p>Country: ${locationInfo.results[0].components.country} / Capital city: ${moreInfo.geonames[0].capital}</p>
-                      <p>Population: ${moreInfo.geonames[0].population}<img id="population-icon" src="./marker-icons/population.png" alt="population-icon"></p>
-                      <p>Address: ${locationInfo.results[0].formatted}</p>
-                      <p>Flag: ${locationInfo.results[0].annotations.flag}</p>
-                      <p>Currency: ${locationInfo.results[0].annotations.currency.name}</p>
-                      `;
-                          // Set modal content
-                          modalContent.html(locationContent);
+                              // Populate modal content with location information
+                              var locationContent = `
+                            <p class="color-blue">Location Info:</p>
+                            <p>Country: ${locationInfo.results[0].components.country} / Capital city: ${moreInfo.geonames[0].capital}</p>
+                            <p>Population: ${moreInfo.geonames[0].population}<img id="population-icon" src="./marker-icons/population.png" alt="population-icon"></p>
+                            <p>Address: ${locationInfo.results[0].formatted}</p>
+                            <p>Flag: ${locationInfo.results[0].annotations.flag}</p>
+                            <p>Currency: ${locationInfo.results[0].annotations.currency.name}</p>
+                            `;
+                              // Set modal content
+                              modalContent.html(locationContent);
 
-                          // Display the modal
-                          modal.css("display", "block");
-                        }
-                      ).addTo(map);
-                      button2 = L.easyButton(
-                        '<i class="fas fa-dollar-sign"></i>',
-                        function (btn, map) {
-                          var modal = $("#myModal3");
-                          var modalContent = $("#modal-content3");
+                              // Display the modal
+                              modal.css("display", "block");
+                            }
+                          ).addTo(map);
+                          button2 = L.easyButton(
+                            '<i class="fas fa-dollar-sign"></i>',
+                            function (btn, map) {
+                              var modal = $("#myModal3");
+                              var modalContent = $("#modal-content3");
 
-                          var exchangeContent = `
-    <p class="color-blue">Currency Calculator</p>
-    <div class="row">
-    <div class="col-md-6">
-    <label for="currencyInput">Currency:</label>
-    <input type="text" id="currencyInput" class="form-control" placeholder="Enter currency">
-    ${locationInfo.results[0].annotations.currency.iso_code}
-    </div>
-    <div class="col-md-6">
-    <label for="exchangeResult">Exchange Result:</label>
-    <input type="text" id="exchangeResult" class="form-control" readonly>
-    USD
-    </div>
-    </div>
-    `;
-                          // Set modal content
-                          modalContent.html(exchangeContent);
-                          $("#currencyInput").on("input", function () {
-                            // Get the value entered in the currencyInput field
-                            var currencyValue = $(this).val();
+                              var exchangeContent = `
+          <p class="color-blue">Currency Calculator</p>
+          <div class="row">
+          <div class="col-md-6">
+          <label for="currencyInput">Currency:</label>
+          <input type="text" id="currencyInput" class="form-control" placeholder="Enter currency">
+          ${locationInfo.results[0].annotations.currency.iso_code}
+          </div>
+          <div class="col-md-6">
+          <label for="exchangeResult">Exchange Result:</label>
+          <input type="text" id="exchangeResult" class="form-control" readonly>
+          USD
+          </div>
+          </div>
+          `;
+                              // Set modal content
+                              modalContent.html(exchangeContent);
+                              $("#currencyInput").on("input", function () {
+                                // Get the value entered in the currencyInput field
+                                var currencyValue = $(this).val();
 
-                            // Perform your calculation or fetch exchange rate here
-                            // For demonstration, let's assume a simple calculation
-                            var exchangeRate =
-                              1 /
-                              exchangeInfo.rates[
-                                locationInfo.results[0].annotations.currency
-                                  .iso_code
-                              ]; // Example exchange rate
-                            var result = currencyValue * exchangeRate; // Calculate the result
+                                // Perform your calculation or fetch exchange rate here
+                                // For demonstration, let's assume a simple calculation
+                                var exchangeRate =
+                                  1 /
+                                  exchangeInfo.rates[
+                                    locationInfo.results[0].annotations.currency
+                                      .iso_code
+                                  ]; // Example exchange rate
+                                var result = currencyValue * exchangeRate; // Calculate the result
 
-                            // Set the value of the exchangeResult input field to the calculated result
-                            $("#exchangeResult").val(result);
-                          });
-                          // Display the modal
-                          modal.css("display", "block");
-                        }
-                      ).addTo(map);
+                                // Set the value of the exchangeResult input field to the calculated result
+                                $("#exchangeResult").val(result);
+                              });
+                              // Display the modal
+                              modal.css("display", "block");
+                            }
+                          ).addTo(map);
 
-                      button3 = L.easyButton(
-                        '<i class="fa-brands fa-wikipedia-w"></i>',
-                        function (btn, map) {
-                          var modal = $("#myModal5");
-                          var modalContent = $("#modal-content5");
-                          var content = `
-                          <p id="useful-info" class="center-the-text color-blue">Useful Info:</p>
-      <p><a href="http://${wikipediaLinks.geonames[0].wikipediaUrl}">${wikipediaLinks.geonames[0].title}</a></p>
-      <p><a href="http://${wikipediaLinks.geonames[1].wikipediaUrl}">${wikipediaLinks.geonames[1].title}</a></p>
-      <p><a href="http://${wikipediaLinks.geonames[2].wikipediaUrl}">${wikipediaLinks.geonames[2].title}</a></p>
-      <p><a href="http://${wikipediaLinks.geonames[3].wikipediaUrl}">${wikipediaLinks.geonames[3].title}</a></p>
-      <p><a href="http://${wikipediaLinks.geonames[4].wikipediaUrl}">${wikipediaLinks.geonames[4].title}</a></p>
+                          button3 = L.easyButton(
+                            '<i class="fa-brands fa-wikipedia-w"></i>',
+                            function (btn, map) {
+                              var modal = $("#myModal5");
+                              var modalContent = $("#modal-content5");
+                              var content = `
+                                <p id="useful-info" class="center-the-text color-blue">Useful Info:</p>
+            <p><a href="http://${wikipediaLinks.geonames[0].wikipediaUrl}">${wikipediaLinks.geonames[0].title}</a></p>
+            <p><a href="http://${wikipediaLinks.geonames[1].wikipediaUrl}">${wikipediaLinks.geonames[1].title}</a></p>
+            <p><a href="http://${wikipediaLinks.geonames[2].wikipediaUrl}">${wikipediaLinks.geonames[2].title}</a></p>
+            <p><a href="http://${wikipediaLinks.geonames[3].wikipediaUrl}">${wikipediaLinks.geonames[3].title}</a></p>
+            <p><a href="http://${wikipediaLinks.geonames[4].wikipediaUrl}">${wikipediaLinks.geonames[4].title}</a></p>
+            `;
+
+                              modalContent.html(content);
+                              modal.css("display", "block");
+                            }
+                          ).addTo(map);
+                          button4 = L.easyButton(
+                            '<i class="fa-solid fa-newspaper"></i>',
+                            function (btn, map) {
+                              // Get references to the modal and modal content
+                              var modal = $("#myModal6");
+                              var modalContent = $("#modal-content6");
+
+                              // Populate modal content with location information
+                              var content = `
+      <p><a href="${newsLinks.results[0].link}">${newsLinks.results[0].title}</a></p>
+      <p><a href="${newsLinks.results[1].link}">${newsLinks.results[1].title}</a></p>
+      <p><a href="${newsLinks.results[2].link}">${newsLinks.results[2].title}</a></p>
+      <p><a href="${newsLinks.results[3].link}">${newsLinks.results[3].title}</a></p>
+      <p><a href="${newsLinks.results[4].link}">${newsLinks.results[4].title}</a></p>
       `;
+                              // Set modal content
+                              modalContent.html(content);
 
-                          modalContent.html(content);
-                          modal.css("display", "block");
-                        }
-                      ).addTo(map);
-                      button4 = L.easyButton(
-                        '<i class="fa-solid fa-newspaper"></i>',
-                        function (btn, map) {
-                          // Get references to the modal and modal content
-                          var modal = $("#myModal6");
-                          var modalContent = $("#modal-content6");
+                              // Display the modal
+                              modal.css("display", "block");
+                            }
+                          ).addTo(map);
+                          button5 = L.easyButton(
+                            '<i class="fa-solid fa-cloud"></i>',
+                            function (btn, map) {
+                              // Get references to the modal and modal content
+                              var modal = $("#myModal4");
+                              var modalContent = $("#modal-content4");
+                              var date1 = new Date(
+                                weatherForecastCity.forecast.forecastday[1].date
+                              );
+                              var dayOfWeek1 = date1.getDay();
+                              var days = [
+                                "Sunday",
+                                "Monday",
+                                "Tuesday",
+                                "Wednesday",
+                                "Thursday",
+                                "Friday",
+                                "Saturday",
+                              ];
+                              var dayOfWeekString1 = days[dayOfWeek1];
+                              var date2 = new Date(
+                                weatherForecastCity.forecast.forecastday[2].date
+                              );
+                              var dayOfWeek2 = date2.getDay();
+                              var dayOfWeekString2 = days[dayOfWeek2];
 
-                          // Populate modal content with location information
-                          var content = `
-<p><a href="${newsLinks.results[0].link}">${newsLinks.results[0].title}</a></p>
-<p><a href="${newsLinks.results[1].link}">${newsLinks.results[1].title}</a></p>
-<p><a href="${newsLinks.results[2].link}">${newsLinks.results[2].title}</a></p>
-<p><a href="${newsLinks.results[3].link}">${newsLinks.results[3].title}</a></p>
-<p><a href="${newsLinks.results[4].link}">${newsLinks.results[4].title}</a></p>
-`;
-                          // Set modal content
-                          modalContent.html(content);
+                              var weatherContent = `
+                              <div class="row">
+                                <div class="col-md-4">
+                                <div>${moreInfo.geonames[0].capital}, ${locationInfo.results[0].components.country}</div>
+                                </div>
+                                <div class="col-md-4" id="today-forecast">
+                                <div><img src="http:${weatherForecastCity.forecast.forecastday[0].day.condition.icon}"><span style="font-size: 2.5rem">${weatherForecastCity.forecast.forecastday[0].day.maxtemp_c}</span>°C</div>
+                                <div class="col-md-12">${weatherForecastCity.forecast.forecastday[0].day.condition.text}</div>
+                                </div>
+                                <div class="col-md-4">
+                                <div><p>Humidity: ${weatherForecastCity.forecast.forecastday[0].day.avghumidity}%</p><p>Wind: ${weatherForecastCity.forecast.forecastday[0].day.maxwind_kph} kph</p></div>
+                                </div>
+                                </div> 
+                                <div class="row">
+                                <div class="col-md-6 row" id="tomorrow">
+                                <div class="col-md-6">
+                                <p>${dayOfWeekString1}:</p><p>${weatherForecastCity.forecast.forecastday[1].day.maxtemp_c}°C</p>
+                                </div>
+                                <div class="col-md-6">
+                                <img src="http:${weatherForecastCity.forecast.forecastday[1].day.condition.icon}">
+                                </div>
+                                </div> 
+                                <div class="col-md-6 row">
+                                  <div class="col-md-6">
+                                  <p>${dayOfWeekString2}:</p><p>${weatherForecastCity.forecast.forecastday[2].day.maxtemp_c}°C</p>
+                                  </div>
+                                  <div class="col-md-6">
+                                  <img src="http:${weatherForecastCity.forecast.forecastday[2].day.condition.icon}">
+                                  </div>
+                                  </div> 
+                                  </div>
+                                  `;
 
-                          // Display the modal
-                          modal.css("display", "block");
-                        }
-                      ).addTo(map);
+                              modalContent.html(weatherContent);
+
+                              // Display the modal
+                              modal.css("display", "block");
+                            }
+                          ).addTo(map);
+                        },
+                        error: function (xhr, status, error) {
+                          console.error(
+                            "Error fetching location info:",
+                            status,
+                            error
+                          );
+                        },
+                      });
                     },
                     error: function (xhr, status, error) {
                       console.error(
