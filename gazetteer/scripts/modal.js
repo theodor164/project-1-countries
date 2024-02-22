@@ -247,7 +247,11 @@ function fetchLocationInfo(lat, lng) {
       if (!response) {
         console.error("Empty response received.");
       }
-      var locationInfo = JSON.parse(response);
+      try {
+        var locationInfo = JSON.parse(response);
+      } catch (error) {
+        console.error("Error parsing JSON response:", error);
+      }
       $.ajax({
         url: "./scripts/getCurrentExchangeRate.php",
         type: "GET",
@@ -255,8 +259,11 @@ function fetchLocationInfo(lat, lng) {
           if (!response) {
             console.error("Empty response received.");
           }
-          var exchangeInfo = JSON.parse(response);
-
+          try {
+            var exchangeInfo = JSON.parse(response);
+          } catch (error) {
+            console.error("Error parsing JSON response:", error);
+          }
           $.ajax({
             url: "./scripts/getMoreInfo.php",
             type: "GET",
@@ -267,8 +274,11 @@ function fetchLocationInfo(lat, lng) {
               if (!response) {
                 console.error("Empty response received.");
               }
-              var moreInfo = JSON.parse(response);
-
+              try {
+                var moreInfo = JSON.parse(response);
+              } catch (error) {
+                console.error("Error parsing JSON response:", error);
+              }
               $.ajax({
                 url: "./scripts/getWeatherInfo.php",
                 type: "GET",
@@ -277,8 +287,11 @@ function fetchLocationInfo(lat, lng) {
                   if (!response) {
                     console.error("Empty response received.");
                   }
-                  var weatherInfo = JSON.parse(response);
-
+                  try {
+                    var weatherInfo = JSON.parse(response);
+                  } catch (error) {
+                    console.error("Error parsing JSON response:", error);
+                  }
                   $.ajax({
                     url: "./scripts/getWeatherForecast.php",
                     data: { lat: lat, lng: lng },
@@ -286,8 +299,11 @@ function fetchLocationInfo(lat, lng) {
                       if (!response) {
                         console.error("Empty response received.");
                       }
-                      var weatherForecast = JSON.parse(response);
-
+                      try {
+                        var weatherForecast = JSON.parse(response);
+                      } catch (error) {
+                        console.error("Error parsing JSON response:", error);
+                      }
                       $.ajax({
                         url: "./scripts/getWikipediaLinks.php",
                         data: { city: locationInfo.results[0].components.city },
@@ -295,8 +311,14 @@ function fetchLocationInfo(lat, lng) {
                           if (!response) {
                             console.error("Empty response received.");
                           }
-                          var wikipediaLinks = JSON.parse(response);
-
+                          try {
+                            var wikipediaLinks = JSON.parse(response);
+                          } catch (error) {
+                            console.error(
+                              "Error parsing JSON response:",
+                              error
+                            );
+                          }
                           $.ajax({
                             url: "./scripts/getNews.php",
                             data: {
@@ -308,7 +330,14 @@ function fetchLocationInfo(lat, lng) {
                               if (!response) {
                                 console.error("Empty response received.");
                               }
-                              var newsLinks = JSON.parse(response);
+                              try {
+                                var newsLinks = JSON.parse(response);
+                              } catch (error) {
+                                console.error(
+                                  "Error parsing JSON response:",
+                                  error
+                                );
+                              }
                               document.getElementById("loader").style.display =
                                 "none";
                               displayLocationInfo(
@@ -607,7 +636,11 @@ function fetchLocationInformation(country) {
       if (!response) {
         console.error("Empty response received.");
       }
-      var locationInfo = JSON.parse(response);
+      try {
+        var locationInfo = JSON.parse(response);
+      } catch (error) {
+        console.error("Error parsing JSON response:", error);
+      }
       $.ajax({
         url: "./scripts/getMoreInfo.php",
         type: "GET",
@@ -618,8 +651,11 @@ function fetchLocationInformation(country) {
           if (!response) {
             console.error("Empty response received.");
           }
-          var moreInfo = JSON.parse(response);
-
+          try {
+            var moreInfo = JSON.parse(response);
+          } catch (error) {
+            console.error("Error parsing JSON response:", error);
+          }
           $.ajax({
             url: "./scripts/getCurrentExchangeRate.php",
             type: "GET",
@@ -627,8 +663,11 @@ function fetchLocationInformation(country) {
               if (!response) {
                 console.error("Empty response received.");
               }
-              var exchangeInfo = JSON.parse(response);
-
+              try {
+                var exchangeInfo = JSON.parse(response);
+              } catch (error) {
+                console.error("Error parsing JSON response:", error);
+              }
               $.ajax({
                 url: "./scripts/getWikipediaLinks.php",
                 data: { city: locationInfo.results[0].components.country },
@@ -636,7 +675,11 @@ function fetchLocationInformation(country) {
                   if (!response) {
                     console.error("Empty response received.");
                   }
-                  var wikipediaLinks = JSON.parse(response);
+                  try {
+                    var wikipediaLinks = JSON.parse(response);
+                  } catch (error) {
+                    console.error("Error parsing JSON response:", error);
+                  }
                   $.ajax({
                     url: "./scripts/getNews.php",
                     data: {
@@ -648,7 +691,11 @@ function fetchLocationInformation(country) {
                       if (!response) {
                         console.error("Empty response received.");
                       }
-                      var newsLinks = JSON.parse(response);
+                      try {
+                        var newsLinks = JSON.parse(response);
+                      } catch (error) {
+                        console.error("Error parsing JSON response:", error);
+                      }
                       $.ajax({
                         url: "./scripts/getWeatherForecastCity.php",
                         type: "GET",
@@ -657,7 +704,14 @@ function fetchLocationInformation(country) {
                           if (!response) {
                             console.error("Empty response received.");
                           }
-                          var weatherForecastCity = JSON.parse(response);
+                          try {
+                            var weatherForecastCity = JSON.parse(response);
+                          } catch (error) {
+                            console.error(
+                              "Error parsing JSON response:",
+                              error
+                            );
+                          }
                           if (button1) button1.remove();
                           if (button2) button2.remove();
                           if (button3) button3.remove();

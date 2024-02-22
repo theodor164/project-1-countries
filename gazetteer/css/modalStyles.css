@@ -50,3 +50,9 @@ div .modal-content {
   height: 30px;
   margin-left: 6px;
 }
+
+@media screen and (max-width: 767px) {
+  div .modal-content {
+    width: 100%;
+  }
+}
