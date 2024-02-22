@@ -6,6 +6,7 @@
   <link rel="stylesheet" href="./css/styles.css">
   <link rel="stylesheet" href="./css/mapStyles.css">
   <link rel="stylesheet" href="./css/modalStyles.css">
+  <link rel="stylesheet" href="./css/leaflet.extra-markers.min.css">
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
      integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
      crossorigin=""/>
@@ -80,6 +81,7 @@
   </div>
 </div>
 
+  <script src="./scripts/leaflet.extra-markers.min.js"></script>
   <script src="./scripts/geojson.js"></script>
   <script src="./scripts/leaflet.js"></script>
   <script src="./scripts/modal.js"></script>

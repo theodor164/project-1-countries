@@ -1,3 +1,128 @@
+var selectedPinsCluster = L.markerClusterGroup();
+// Define separate layer groups for different categories of markers
+var airportLayer = L.markerClusterGroup();
+var cityLayer = L.markerClusterGroup();
+var universityLayer = L.markerClusterGroup();
+var stadiumLayer = L.markerClusterGroup();
+
+// Add layer groups to the Layer Control
+layerControl.addOverlay(airportLayer, "Airports");
+layerControl.addOverlay(cityLayer, "Cities");
+layerControl.addOverlay(universityLayer, "Universities");
+layerControl.addOverlay(stadiumLayer, "Stadiums");
+
+document
+  .querySelector(
+    "#map > div.leaflet-control-container > div.leaflet-top.leaflet-right > div > section > div.leaflet-control-layers-overlays > label:nth-child(1) > span > input"
+  )
+  .setAttribute("id", "airportsCheckbox");
+document
+  .querySelector(
+    "#map > div.leaflet-control-container > div.leaflet-top.leaflet-right > div > section > div.leaflet-control-layers-overlays > label:nth-child(2) > span > input"
+  )
+  .setAttribute("id", "citiesCheckbox");
+document
+  .querySelector(
+    "#map > div.leaflet-control-container > div.leaflet-top.leaflet-right > div > section > div.leaflet-control-layers-overlays > label:nth-child(3) > span > input"
+  )
+  .setAttribute("id", "universitiesCheckbox");
+document
+  .querySelector(
+    "#map > div.leaflet-control-container > div.leaflet-top.leaflet-right > div > section > div.leaflet-control-layers-overlays > label:nth-child(4) > span > input"
+  )
+  .setAttribute("id", "stadiumsCheckbox");
+
+  
+  // Function to handle the onchange event of the country selection input
+function handleCountrySelection() {
+  var selectedCountry = $("#countrySelect").val();
+  var selectedCountryFull = $("#countrySelect option:selected").html();
+  removeAllMarkers();
+  fetchLocationInformation(selectedCountryFull);
+    
+  // Send AJAX request to get more information based on the selected country
+  $.ajax({
+    url: "./scripts/getCountryAirports.php",
+    type: "GET",
+    data: {
+      country: selectedCountry,
+    },
+    success: function (response) {
+      if (!response) {
+        console.error("Empty response received.");
+      }
+      var airportInfo = JSON.parse(response);
+      
+      if (showAirports) {
+        // Add markers for the location information of the selected country
+        airportInfo.geonames.forEach(function (location) {
+          var marker = L.marker([location.lat, location.lng], {
+            icon: airportMarker, // Assuming you have an array of leaf icons
+          });
+          leafIndex++;
+          marker.bindPopup(`Location: ${location.name}`); // Customize popup content as needed
+          airportLayer.addLayer(marker);
+        });
+      }
+      // Add the marker cluster group to the map
+      map.addLayer(airportLayer);
+    },
+    error: function (xhr, status, error) {
+      console.error("Error fetching more information:", error);
+    },
+  });
+}
+
+$(document).ready(function() {
+  // Event listener for the airports checkbox
+  $("#airportsCheckbox").change(function() {
+      if ($(this).is(":checked")) {
+        // If checkbox is checked, add airport markers
+        $.ajax({
+          url: "./scripts/getCountryAirports.php",
+          type: "GET",
+          data: {
+            country: selectedCountry,
+          },
+          success: function (response) {
+            if (!response) {
+              console.error("Empty response received.");
+            }
+            var airportInfo = JSON.parse(response);
+            
+            if (showAirports) {
+              // Add markers for the location information of the selected country
+              airportInfo.geonames.forEach(function (location) {
+                var marker = L.marker([location.lat, location.lng], {
+                  icon: airportMarker, // Assuming you have an array of leaf icons
+                });
+                leafIndex++;
+                marker.bindPopup(`Location: ${location.name}`); // Customize popup content as needed
+                airportLayer.addLayer(marker);
+              });
+            }
+            // Add the marker cluster group to the map
+            map.addLayer(airportLayer);
+          },
+          error: function (xhr, status, error) {
+            console.error("Error fetching more information:", error);
+          },
+        });
+      } else {
+          // If checkbox is unchecked, remove airport markers
+          airportLayer.clearLayers();
+      }
+  });
+});
+
+// Creates a red marker with the coffee icon
+var airportMarker = L.ExtraMarkers.icon({
+  icon: 'fa-solid fa-plane',
+  iconColor: 'blue',
+  shape: 'square',
+  prefix: 'fa'
+});
+
 var greenIcon = L.icon({
   iconUrl: "./marker-icons/leaf-green.png",
   shadowUrl: "./marker-icons/leaf-shadow.png",
@@ -12,7 +137,7 @@ var greenIcon = L.icon({
 var redIcon = L.icon({
   iconUrl: "./marker-icons/leaf-red.png",
   shadowUrl: "./marker-icons/leaf-shadow.png",
-
+  
   iconSize: [38, 95], // size of the icon
   shadowSize: [50, 64], // size of the shadow
   iconAnchor: [22, 94], // point of the icon which will correspond to marker's location
@@ -23,7 +148,7 @@ var redIcon = L.icon({
 var orangeIcon = L.icon({
   iconUrl: "./marker-icons/leaf-orange.png",
   shadowUrl: "./marker-icons/leaf-shadow.png",
-
+  
   iconSize: [38, 95], // size of the icon
   shadowSize: [50, 64], // size of the shadow
   iconAnchor: [22, 94], // point of the icon which will correspond to marker's location
@@ -361,50 +486,9 @@ function displayLocationInfo(
   });
 }
 
-// Function to handle the onchange event of the country selection input
-function handleCountrySelection() {
-  var selectedCountry = $("#countrySelect option:selected").html();
-
-  // Send AJAX request to get more information based on the selected country
-  $.ajax({
-    url: "./scripts/getCountryPlaces.php",
-    type: "GET",
-    data: {
-      country: selectedCountry,
-    },
-    success: function (response) {
-      if (!response) {
-        console.error("Empty response received.");
-      }
-      var moreInfo = JSON.parse(response);
-
-      // Remove existing markers
-      removeAllMarkers();
-
-      // Add markers for the location information of the selected country
-      moreInfo.geonames.forEach(function (location) {
-        var marker = L.marker([location.lat, location.lng], {
-          icon: leafs[leafIndex % 3], // Assuming you have an array of leaf icons
-        });
-        leafIndex++;
-        marker.bindPopup(`Location: ${location.name}`); // Customize popup content as needed
-        selectedPinsCluster.addLayer(marker);
-      });
-
-      // Add the marker cluster group to the map
-      map.addLayer(selectedPinsCluster);
-      fetchLocationInformation(selectedCountry);
-    },
-    error: function (xhr, status, error) {
-      console.error("Error fetching more information:", error);
-    },
-  });
-}
-
 // Add an onchange event listener to the country selection input
 $("#countrySelect").change(handleCountrySelection);
 
-var selectedPinsCluster = L.markerClusterGroup();
 
 function onMapClick(e) {
   var modal = document.getElementById("myModal");
@@ -426,6 +510,10 @@ map.on("click", onMapClick);
 // Function to remove all markers
 function removeAllMarkers() {
   selectedPinsCluster.clearLayers();
+  airportLayer.clearLayers();
+  cityLayer.clearLayers();
+  universityLayer.clearLayers();
+  stadiumLayer.clearLayers();
 }
 
 // Create an easyButton to remove all markers
@@ -499,7 +587,6 @@ function fetchLocationInformation(country) {
                       <p class="color-blue">Location Info:</p>
                       <p>Country: ${locationInfo.results[0].components.country} / Capital city: ${moreInfo.geonames[0].capital}</p>
                       <p>Population: ${moreInfo.geonames[0].population}<img id="population-icon" src="./marker-icons/population.png" alt="population-icon"></p>
-                      <p>City: ${locationInfo.results[0].components.city}</p>
                       <p>Address: ${locationInfo.results[0].formatted}</p>
                       <p>Flag: ${locationInfo.results[0].annotations.flag}</p>
                       <p>Currency: ${locationInfo.results[0].annotations.currency.name}</p>

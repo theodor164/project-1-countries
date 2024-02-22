@@ -35,17 +35,6 @@ function fetchCoordinates(countryCode) {
       });
 
       if (selectedCountry) {
-        // Swap the coordinates if needed
-        // if (selectedCountry.geometry.type === "Polygon") {
-        //   selectedCountry.geometry.coordinates = swapLatLongCoordinates([
-        //     selectedCountry.geometry.coordinates,
-        //   ]);
-        // } else {
-        //   selectedCountry.geometry.coordinates = swapLatLongCoordinates(
-        //     selectedCountry.geometry.coordinates
-        //   );
-        // }
-
         if (!highlightedLayer) {
           highlightedLayer = L.geoJson(selectedCountry, {
             style: {
@@ -69,56 +58,32 @@ function fetchCoordinates(countryCode) {
   });
 }
 
-var originalCoordinates = [
-  [
-    [-90.09555457229098, 13.735337632700734],
-    [-90.60862403030085, 13.909771429901951],
-    [-91.23241024449605, 13.927832342987957],
-    [-91.68974667027912, 14.126218166556455],
-    [-92.22775000686983, 14.538828640190928],
-    [-92.20322953974731, 14.830102850804069],
-    [-92.08721594925207, 15.06458466232844],
-    [-92.22924862340628, 15.25144664149586],
-    [-91.74796017125591, 16.066564846251723],
-    [-90.46447262242265, 16.069562079324655],
-    [-90.43886695022204, 16.410109768128095],
-    [-90.60084672724092, 16.47077789963876],
-    [-90.71182186558772, 16.687483018454728],
-    [-91.08167009150065, 16.918476670799404],
-    [-91.45392127151516, 17.252177232324172],
-    [-91.0022692532842, 17.25465770107418],
-    [-91.00151994501596, 17.81759491624571],
-    [-90.06793351923098, 17.819326076727474],
-    [-89.14308041050332, 17.80831899664932],
-    [-89.15080603713095, 17.015576687075836],
-    [-89.22912167026928, 15.88693756760517],
-    [-88.93061275913527, 15.887273464415074],
-    [-88.60458614780583, 15.70638011317736],
-    [-88.51836402052686, 15.855389105690975],
-    [-88.22502275262202, 15.727722479713902],
-    [-88.68067969435563, 15.346247056535304],
-    [-89.15481096063357, 15.06641917567481],
-    [-89.22522009963127, 14.874286200413621],
-    [-89.14553504103718, 14.678019110569084],
-    [-89.35332597528279, 14.424132798719116],
-    [-89.58734269891654, 14.362586167859488],
-    [-89.53421932652051, 14.244815578666305],
-    [-89.72193396682073, 14.134228013561694],
-    [-90.0646779039966, 13.881969509328924],
-    [-90.09555457229098, 13.735337632700734],
-  ],
-];
-var swappedCoordinates = swapLatLongCoordinates([originalCoordinates]);
-
-var map = L.map("map").fitBounds(swappedCoordinates);
-
 var markerCluster = L.markerClusterGroup();
 
-L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
+var streets = L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
   maxZoom: 19,
   attribution:
     '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-}).addTo(map);
+});
+
+var satellite = L.tileLayer(
+  "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
+  {
+    attribution:
+      "Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community"
+  }
+);
+
+var basemaps = {
+  "Streets": streets,
+  "Satellite": satellite
+};
+
+var map = L.map("map", {
+  layers: [streets]
+}).setView([54.5, -4], 6);
+
+var layerControl = L.control.layers(basemaps).addTo(map);
 
 var popup = L.popup();
 
