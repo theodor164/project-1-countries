@@ -675,11 +675,11 @@ function fetchLocationInformation(country) {
                               // Populate modal content with location information
                               var locationContent = `
                             <p class="color-blue">Location Info:</p>
-                            <p>Country: ${locationInfo.results[0].components.country} / Capital city: ${moreInfo.geonames[0].capital}</p>
-                            <p>Population: ${moreInfo.geonames[0].population}<img id="population-icon" src="./marker-icons/population.png" alt="population-icon"></p>
-                            <p>Address: ${locationInfo.results[0].formatted}</p>
-                            <p>Flag: ${locationInfo.results[0].annotations.flag}</p>
-                            <p>Currency: ${locationInfo.results[0].annotations.currency.name}</p>
+                            <p><i class="fa-solid fa-earth-americas"></i>Country: ${locationInfo.results[0].components.country} / <i class="fa-solid fa-city"></i>Capital city: ${moreInfo.geonames[0].capital}</p>
+                            <p><i class="fa-solid fa-person"></i>Population: ${moreInfo.geonames[0].population}<img id="population-icon" src="./marker-icons/population.png" alt="population-icon"></p>
+                            <p><i class="fa-solid fa-address-book"></i>Address: ${locationInfo.results[0].formatted}</p>
+                            <p><i class="fa-solid fa-flag"></i>Flag: ${locationInfo.results[0].annotations.flag}</p>
+                            <p><i class="fa-solid fa-dollar-sign"></i>Currency: ${locationInfo.results[0].annotations.currency.name}</p>
                             `;
                               // Set modal content
                               modalContent.html(locationContent);
