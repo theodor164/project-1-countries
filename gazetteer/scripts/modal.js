@@ -32,88 +32,78 @@ document
   )
   .setAttribute("id", "stadiumsCheckbox");
 
+  $(document).ready(function() {
+    // Event listener for the airports checkbox
+    $("#airportsCheckbox").change(function() {
+        // Check if the checkbox is checked
+        var showAirports = $(this).is(":checked");
   
-  // Function to handle the onchange event of the country selection input
-function handleCountrySelection() {
-  var selectedCountry = $("#countrySelect").val();
-  var selectedCountryFull = $("#countrySelect option:selected").html();
-  removeAllMarkers();
-  fetchLocationInformation(selectedCountryFull);
-    
-  // Send AJAX request to get more information based on the selected country
-  $.ajax({
-    url: "./scripts/getCountryAirports.php",
-    type: "GET",
-    data: {
-      country: selectedCountry,
-    },
-    success: function (response) {
-      if (!response) {
-        console.error("Empty response received.");
-      }
-      var airportInfo = JSON.parse(response);
-      
-      if (showAirports) {
-        // Add markers for the location information of the selected country
-        airportInfo.geonames.forEach(function (location) {
-          var marker = L.marker([location.lat, location.lng], {
-            icon: airportMarker, // Assuming you have an array of leaf icons
-          });
-          leafIndex++;
-          marker.bindPopup(`Location: ${location.name}`); // Customize popup content as needed
-          airportLayer.addLayer(marker);
-        });
-      }
-      // Add the marker cluster group to the map
-      map.addLayer(airportLayer);
-    },
-    error: function (xhr, status, error) {
-      console.error("Error fetching more information:", error);
-    },
-  });
-}
-
-$(document).ready(function() {
-  // Event listener for the airports checkbox
-  $("#airportsCheckbox").change(function() {
-      if ($(this).is(":checked")) {
         // If checkbox is checked, add airport markers
-        $.ajax({
-          url: "./scripts/getCountryAirports.php",
-          type: "GET",
-          data: {
-            country: selectedCountry,
-          },
-          success: function (response) {
-            if (!response) {
-              console.error("Empty response received.");
-            }
-            var airportInfo = JSON.parse(response);
-            
-            if (showAirports) {
-              // Add markers for the location information of the selected country
-              airportInfo.geonames.forEach(function (location) {
-                var marker = L.marker([location.lat, location.lng], {
-                  icon: airportMarker, // Assuming you have an array of leaf icons
-                });
-                leafIndex++;
-                marker.bindPopup(`Location: ${location.name}`); // Customize popup content as needed
-                airportLayer.addLayer(marker);
-              });
-            }
-            // Add the marker cluster group to the map
-            map.addLayer(airportLayer);
-          },
-          error: function (xhr, status, error) {
-            console.error("Error fetching more information:", error);
-          },
-        });
-      } else {
+        if (showAirports) {
+          // Call the handleCountrySelection function to fetch and display airport markers
+          handleCountrySelection();
+        } else {
           // If checkbox is unchecked, remove airport markers
           airportLayer.clearLayers();
-      }
+        }
+    });
+  
+    // Event listener for the country select input
+    $("#countrySelect").change(function() {
+      // When the country selection changes, fetch and display information based on the selected country
+      handleCountrySelection();
+    });
   });
-});
+  
+  // Function to handle the onchange event of the country selection input
+  function handleCountrySelection() {
+    var selectedCountry = $("#countrySelect").val();
+    var selectedCountryFull = $("#countrySelect option:selected").html();
+    removeAllMarkers();
+    fetchLocationInformation(selectedCountryFull);
+      
+    // Send AJAX request to get airport information based on the selected country
+    $.ajax({
+      url: "./scripts/getCountryAirports.php",
+      type: "GET",
+      data: {
+        country: selectedCountry,
+      },
+      success: function (response) {
+        if (!response) {
+          console.error("Empty response received.");
+        }
+        var airportInfo = JSON.parse(response);
+  
+        // Add or remove airport markers based on the checkbox state
+        if ($("#airportsCheckbox").is(":checked")) {
+          addAirportMarkers(airportInfo);
+        } else {
+          airportLayer.clearLayers();
+        }
+      },
+      error: function (xhr, status, error) {
+        console.error("Error fetching airport information:", error);
+      },
+    });
+  }
+  
+  // Function to add airport markers to the airportLayer
+  function addAirportMarkers(airportInfo) {
+    airportLayer.clearLayers(); // Clear existing markers
+    
+    // Add markers for the location information of the selected country
+    airportInfo.geonames.forEach(function (location) {
+      var marker = L.marker([location.lat, location.lng], {
+        icon: airportMarker,
+      });
+      marker.bindPopup(`Location: ${location.name}`);
+      airportLayer.addLayer(marker);
+    });
+  
+    // Add the airportLayer to the map
+    map.addLayer(airportLayer);
+  }
 
 // Creates a red marker with the coffee icon
 var airportMarker = L.ExtraMarkers.icon({
@@ -487,7 +477,6 @@ function displayLocationInfo(
 }
 
 // Add an onchange event listener to the country selection input
-$("#countrySelect").change(handleCountrySelection);
 
 
 function onMapClick(e) {
