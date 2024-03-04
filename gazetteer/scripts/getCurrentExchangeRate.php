@@ -6,5 +6,12 @@ $apiUrl = "https://openexchangerates.org/api/latest.json?app_id={$apiKey}";
 
 $response = file_get_contents($apiUrl);
 
+// Check if request was successful
+if ($response === FALSE) {
+  http_response_code(500); // Internal Server Error
+  echo json_encode(array('error' => 'Error making request to the API.'));
+  exit;
+}
+
 echo $response;
 ?>
