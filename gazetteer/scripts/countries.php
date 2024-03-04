@@ -8,27 +8,20 @@ $data = json_decode($jsonData, true);
 // Extract country features
 $countries = $data['features'];
 
-// Function to generate options for the select element
-function generateOptions($countries) {
+// Prepare an array to hold country data
+$countryData = [];
 
-    // Sort countries alphabetically by name
-    usort($countries, function($a, $b) {
-        return strcmp($a['properties']['name'], $b['properties']['name']);
-    });
-
-    $options = '';
-
-    foreach ($countries as $country) {
-        $name = $country['properties']['name'];
-        $iso_a2 = $country['properties']['iso_a2'];
-        $options .= "<option value=\"$iso_a2\" class='text-center'>$name</option>";
-    }
-
-    return $options;
+// Iterate through countries and extract necessary information
+foreach ($countries as $country) {
+    $name = $country['properties']['name'];
+    $iso_a2 = $country['properties']['iso_a2'];
+    $countryData[] = [
+        'name' => $name,
+        'iso_a2' => $iso_a2
+    ];
 }
 
-//Render the select element
-echo '<select id="countrySelect" class="form-select">';
-echo generateOptions($countries);
-echo '</select>';
+// Output JSON
+header('Content-Type: application/json');
+echo json_encode($countryData);
 ?>
