@@ -23,19 +23,23 @@ $(document).ready(function () {
 
 // Function to fetch coordinates based on the selected country code
 function fetchCoordinates(countryCode) {
-  // Make an AJAX request to fetch the JSON data
+  // Make an AJAX request to fetch the JSON data for the selected country
   $.ajax({
-    url: "./scripts/countryBorders.geo.json",
+    url: "./scripts/getCountryFeatures.php",
     dataType: "json",
+    data: {
+      countryCode: countryCode
+    },
     success: function (data) {
-      // Find the selected country in the JSON data
-      var selectedCountry = data.features.find(function (country) {
-        return country.properties.iso_a2 === countryCode;
-      });
-
-      if (selectedCountry) {
+      if (data) {
         if (!highlightedLayer) {
-          highlightedLayer = L.geoJson(selectedCountry, {
+          // Remove any previously highlighted layers
+          if (highlightedLayer) {
+            map.removeLayer(highlightedLayer);
+          }
+
+          // Create a new layer for the selected country and add it to the map
+          highlightedLayer = L.geoJson(data, {
             style: {
               fillColor: "red",
               fillOpacity: 0.1,
@@ -48,14 +52,15 @@ function fetchCoordinates(countryCode) {
           map.fitBounds(highlightedLayer.getBounds());
         }
       } else {
-        console.error("Selected country not found in the JSON data.");
+        console.error("Selected country not found.");
       }
     },
     error: function (xhr, status, error) {
-      console.error("Error fetching JSON data:", status, error);
+      console.error("Error fetching country data:", status, error);
     },
   });
 }
+
 
 var streets = L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
   maxZoom: 19,
