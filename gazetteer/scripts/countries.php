@@ -28,7 +28,7 @@ function generateOptions($countries) {
 }
 
 //Render the select element
-echo '<select id="countrySelect" class="custom-select mr-sm-2">';
+echo '<select id="countrySelect" class="form-select">';
 echo generateOptions($countries);
 echo '</select>';
 ?>
