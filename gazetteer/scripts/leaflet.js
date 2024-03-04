@@ -1,4 +1,3 @@
-var data = window.geojsonData;
 var highlightedLayer; // Global variable to store the highlighted layer
 
 function swapLatLongCoordinates(coordinates) {
@@ -58,8 +57,6 @@ function fetchCoordinates(countryCode) {
   });
 }
 
-var markerCluster = L.markerClusterGroup();
-
 var streets = L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
   maxZoom: 19,
   attribution:
@@ -87,25 +84,7 @@ var layerControl = L.control.layers(basemaps).addTo(map);
 
 var popup = L.popup();
 
-L.geoJson(data, {
-  onEachFeature: function (feature, layer) {
-    layer.bindPopup(feature.properties.name);
-  },
-  pointToLayer: function (feature, latlng) {
-    var myicon = L.icon({
-      iconUrl: feature.properties.icon,
-      iconSize: [24, 24],
-      iconAnchor: [0, 24],
-      popupAnchor: [12, -32],
-    });
 
-    var marker = L.marker(latlng, { icon: myicon });
-    markerCluster.addLayer(marker); // Add marker to the cluster group
-    return marker;
-  },
-}).addTo(markerCluster);
-
-map.addLayer(markerCluster);
 
 var yourPosition = L.popup().setContent("Your Position!");
 
