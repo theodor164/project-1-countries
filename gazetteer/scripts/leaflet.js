@@ -84,10 +84,6 @@ var layerControl = L.control.layers(basemaps).addTo(map);
 
 var popup = L.popup();
 
-
-
-var yourPosition = L.popup().setContent("Your Position!");
-
 navigator.geolocation.getCurrentPosition(showPosition);
 
 function showPosition(position) {
@@ -115,12 +111,4 @@ function showPosition(position) {
       console.error("Error fetching location info:", status, error);
     },
   });
-
-  // Display a marker at your current location
-  L.easyButton("fa-crosshairs", function (btn, map) {
-    yourPosition
-      .setLatLng([position.coords.latitude, position.coords.longitude])
-      .openOn(map);
-    map.setView([position.coords.latitude, position.coords.longitude], 13);
-  }).addTo(map);
 }
