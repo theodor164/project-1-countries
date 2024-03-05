@@ -417,7 +417,7 @@ function fetchLocationInformation(country) {
                               var locationContent = `
                             <p class="color-blue center-the-text">Location Info:</p>
                             <p><i class="fa-solid fa-earth-americas"></i>Country: ${locationInfo.results[0].components.country} / <i class="fa-solid fa-city"></i>Capital city: ${moreInfo.geonames[0].capital}</p>
-                            <p><i class="fa-solid fa-person"></i>Population: ${moreInfo.geonames[0].population}<img id="population-icon" src="./marker-icons/population.png" alt="population-icon"></p>
+                            <p><i class="fa-solid fa-person"></i>Population: ${numeral(moreInfo.geonames[0].population).format("0,0")}<img id="population-icon" src="./marker-icons/population.png" alt="population-icon"></p>
                             <p><i class="fa-solid fa-address-book"></i>Address: ${locationInfo.results[0].formatted}</p>
                             <p><i class="fa-solid fa-flag"></i>Flag: ${locationInfo.results[0].annotations.flag}</p>
                             <p><i class="fa-solid fa-dollar-sign"></i>Currency: ${locationInfo.results[0].annotations.currency.name}</p>
@@ -464,7 +464,8 @@ function fetchLocationInformation(country) {
                                     locationInfo.results[0].annotations.currency
                                       .iso_code
                                   ]; // Example exchange rate
-                                var result = currencyValue * exchangeRate; // Calculate the result
+                                  var result = currencyValue * exchangeRate; // Calculate the result
+                                  result = numeral(result).format("0,0.0000"); // Calculate the result
 
                                 // Set the value of the exchangeResult input field to the calculated result
                                 $("#exchangeResult").val(result);
@@ -548,17 +549,17 @@ function fetchLocationInformation(country) {
                                 <div>${moreInfo.geonames[0].capital}, ${locationInfo.results[0].components.country}</div>
                                 </div>
                                 <div class="col-md-4" id="today-forecast">
-                                <div><img src="http:${weatherForecastCity.forecast.forecastday[0].day.condition.icon}"><span style="font-size: 2.5rem">${weatherForecastCity.forecast.forecastday[0].day.maxtemp_c}</span>°C</div>
+                                <div><img src="http:${weatherForecastCity.forecast.forecastday[0].day.condition.icon}"><span style="font-size: 2.5rem">${numeral(weatherForecastCity.forecast.forecastday[0].day.maxtemp_c).format('0,0.0')}</span>°C</div>
                                 <div class="col-md-12">${weatherForecastCity.forecast.forecastday[0].day.condition.text}</div>
                                 </div>
                                 <div class="col-md-4">
-                                <div><p>Humidity: ${weatherForecastCity.forecast.forecastday[0].day.avghumidity}%</p><p>Wind: ${weatherForecastCity.forecast.forecastday[0].day.maxwind_kph} kph</p></div>
+                                <div><p>Humidity: ${numeral(weatherForecastCity.forecast.forecastday[0].day.avghumidity).format('0,0.0')}%</p><p>Wind: ${numeral(weatherForecastCity.forecast.forecastday[0].day.maxwind_kph).format('0,0.0')} kph</p></div>
                                 </div>
                                 </div> 
                                 <div class="row">
                                 <div class="col-md-6 row" id="tomorrow">
                                 <div class="col-md-6">
-                                <p>${dayOfWeekString1}:</p><p>${weatherForecastCity.forecast.forecastday[1].day.maxtemp_c}°C</p>
+                                <p>${dayOfWeekString1}:</p><p>${numeral(weatherForecastCity.forecast.forecastday[1].day.maxtemp_c).format('0,0.0')}°C</p>
                                 </div>
                                 <div class="col-md-6">
                                 <img src="http:${weatherForecastCity.forecast.forecastday[1].day.condition.icon}">
@@ -566,7 +567,7 @@ function fetchLocationInformation(country) {
                                 </div> 
                                 <div class="col-md-6 row">
                                   <div class="col-md-6">
-                                  <p>${dayOfWeekString2}:</p><p>${weatherForecastCity.forecast.forecastday[2].day.maxtemp_c}°C</p>
+                                  <p>${dayOfWeekString2}:</p><p>${numeral(weatherForecastCity.forecast.forecastday[2].day.maxtemp_c).format('0,0.0')}°C</p>
                                   </div>
                                   <div class="col-md-6">
                                   <img src="http:${weatherForecastCity.forecast.forecastday[2].day.condition.icon}">
@@ -666,4 +667,10 @@ function showToast(message, duration, close) {
     },
     onClick: function () {}, // Callback after click
   }).showToast();
+}
+
+// Function to format numbers using numeral.js
+function formatNumber(value) {
+  // Use numeral.js to format the value
+  return numeral(value).format("0,0");
 }
