@@ -515,24 +515,29 @@ function fetchLocationInformation(country) {
                           button4 = L.easyButton(
                             '<i class="fa-solid fa-newspaper"></i>',
                             function (btn, map) {
-                              // Get references to the modal and modal content
-                              var modal = $("#myModal6");
-                              var modalContent = $("#modal-content6");
 
-                              // Populate modal content with location information
-                              var content = `
-                              <p class="center-the-text color-blue">News:</p>
-      <p><a href="${newsLinks.results[0].link}">${newsLinks.results[0].title}</a></p>
-      <p><a href="${newsLinks.results[1].link}">${newsLinks.results[1].title}</a></p>
-      <p><a href="${newsLinks.results[2].link}">${newsLinks.results[2].title}</a></p>
-      <p><a href="${newsLinks.results[3].link}">${newsLinks.results[3].title}</a></p>
-      <p><a href="${newsLinks.results[4].link}">${newsLinks.results[4].title}</a></p>
-      `;
-                              // Set modal content
-                              modalContent.html(content);
+                              $("#exampleModal").modal("show");
+                              
+                              $("#first-image").attr("src", newsLinks.articles[0].urlToImage);
+                              $("#first-link").attr("href", newsLinks.articles[0].url);
+                              $("#first-link").html(newsLinks.articles[0].title);
+                              $("#first-source").html(newsLinks.articles[0].source.name);
 
-                              // Display the modal
-                              modal.css("display", "block");
+                              $("#second-image").attr("src", newsLinks.articles[1].urlToImage);
+                              $("#second-link").attr("href", newsLinks.articles[1].url);
+                              $("#second-link").html(newsLinks.articles[1].title);
+                              $("#second-source").html(newsLinks.articles[1].source.name);
+
+                              $("#third-image").attr("src", newsLinks.articles[2].urlToImage);
+                              $("#third-link").attr("href", newsLinks.articles[2].url);
+                              $("#third-link").html(newsLinks.articles[2].title);
+                              $("#third-source").html(newsLinks.articles[2].source.name);
+
+                              $("#fourth-image").attr("src", newsLinks.articles[3].urlToImage);
+                              $("#fourth-link").attr("href", newsLinks.articles[3].url);
+                              $("#fourth-link").html(newsLinks.articles[3].title);
+                              $("#fourth-source").html(newsLinks.articles[3].source.name);
+
                             }
                           ).addTo(map);
                           button5 = L.easyButton(
