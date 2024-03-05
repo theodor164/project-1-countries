@@ -518,25 +518,25 @@ function fetchLocationInformation(country) {
 
                               $("#exampleModal").modal("show");
                               
-                              $("#first-image").attr("src", newsLinks.articles[0].urlToImage);
-                              $("#first-link").attr("href", newsLinks.articles[0].url);
-                              $("#first-link").html(newsLinks.articles[0].title);
-                              $("#first-source").html(newsLinks.articles[0].source.name);
+                              $("#first-image").attr("src", newsLinks.results[0].image_url);
+                              $("#first-link").attr("href", newsLinks.results[0].link);
+                              $("#first-link").html(newsLinks.results[0].title);
+                              $("#first-source").html(newsLinks.results[0].source_id);
 
-                              $("#second-image").attr("src", newsLinks.articles[1].urlToImage);
-                              $("#second-link").attr("href", newsLinks.articles[1].url);
-                              $("#second-link").html(newsLinks.articles[1].title);
-                              $("#second-source").html(newsLinks.articles[1].source.name);
+                              $("#second-image").attr("src", newsLinks.results[1].image_url);
+                              $("#second-link").attr("href", newsLinks.results[1].link);
+                              $("#second-link").html(newsLinks.results[1].title);
+                              $("#second-source").html(newsLinks.results[1].source_id);
 
-                              $("#third-image").attr("src", newsLinks.articles[2].urlToImage);
-                              $("#third-link").attr("href", newsLinks.articles[2].url);
-                              $("#third-link").html(newsLinks.articles[2].title);
-                              $("#third-source").html(newsLinks.articles[2].source.name);
+                              $("#third-image").attr("src", newsLinks.results[2].image_url);
+                              $("#third-link").attr("href", newsLinks.results[2].link);
+                              $("#third-link").html(newsLinks.results[2].title);
+                              $("#third-source").html(newsLinks.results[2].source_id);
 
-                              $("#fourth-image").attr("src", newsLinks.articles[3].urlToImage);
-                              $("#fourth-link").attr("href", newsLinks.articles[3].url);
-                              $("#fourth-link").html(newsLinks.articles[3].title);
-                              $("#fourth-source").html(newsLinks.articles[3].source.name);
+                              $("#fourth-image").attr("src", newsLinks.results[3].image_url);
+                              $("#fourth-link").attr("href", newsLinks.results[3].link);
+                              $("#fourth-link").html(newsLinks.results[3].title);
+                              $("#fourth-source").html(newsLinks.results[3].source_id);
 
                             }
                           ).addTo(map);
