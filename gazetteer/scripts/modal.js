@@ -1,9 +1,41 @@
 var selectedPinsCluster = L.markerClusterGroup();
 // Define separate marker cluster groups for different categories of markers
-var airportLayer = L.markerClusterGroup();
-var cityLayer = L.markerClusterGroup();
-var universityLayer = L.markerClusterGroup();
-var stadiumLayer = L.markerClusterGroup();
+var airportLayer = L.markerClusterGroup({
+  polygonOptions: {
+    fillColor: "#fff",
+    color: "#000",
+    weight: 2,
+    opacity: 1,
+    fillOpacity: 0.5,
+  },
+}).addTo(map);
+var cityLayer = L.markerClusterGroup({
+  polygonOptions: {
+    fillColor: "#fff",
+    color: "#000",
+    weight: 2,
+    opacity: 1,
+    fillOpacity: 0.5,
+  },
+}).addTo(map);
+var universityLayer = L.markerClusterGroup({
+  polygonOptions: {
+    fillColor: "#fff",
+    color: "#000",
+    weight: 2,
+    opacity: 1,
+    fillOpacity: 0.5,
+  },
+}).addTo(map);
+var stadiumLayer = L.markerClusterGroup({
+  polygonOptions: {
+    fillColor: "#fff",
+    color: "#000",
+    weight: 2,
+    opacity: 1,
+    fillOpacity: 0.5,
+  },
+}).addTo(map);
 
 // Add marker cluster groups to the Layer Control
 layerControl.addOverlay(airportLayer, "Airports");
@@ -72,6 +104,7 @@ $(document).ready(function () {
 function handleCheckboxChange(layer, scriptUrl, id, layerName) {
   var isChecked = $(id).is(":checked");
   if (isChecked) {
+    showToast(`Getting ${layerName} markers`, 1500, false);
     // Call the function to fetch and display markers
     handleCountrySelection2(layer, scriptUrl, layerName);
   } else {
@@ -115,7 +148,6 @@ function handleCountrySelection2(layer, scriptUrl, layerName) {
   var selectedCountry = $("#countrySelect").val();
   var selectedCountryFull = $("#countrySelect option:selected").html();
   // removeAllMarkers();
-
   // Send AJAX request to get marker information based on the selected country
   $.ajax({
     url: scriptUrl,
@@ -146,6 +178,16 @@ function addMarkers(layer, markerInfo, layerName) {
     var marker = L.marker([location.lat, location.lng], {
       icon: getMarkerIcon(layerName),
     });
+    layerName === "Cities"
+      ? marker.bindTooltip(
+          "<div class='col text-center'><strong>" +
+            location.name +
+            "</strong><br><i>(" +
+            numeral(location.population).format("0,0") +
+            ")</i></div>",
+          { direction: "top", sticky: true }
+        )
+      : marker.bindTooltip(location.name, { direction: "top", sticky: true });
     marker.bindPopup(`Location: ${location.name}`);
     layer.addLayer(marker);
   });
@@ -170,18 +212,19 @@ function getMarkerIcon(category) {
 
 // Creates a red marker with the coffee icon
 var airportMarker = L.ExtraMarkers.icon({
-  icon: "fa-solid fa-plane",
-  iconColor: "blue",
-  shape: "square",
   prefix: "fa",
+  icon: "fa-plane",
+  iconColor: "black",
+  markerColor: "white",
+  shape: "square",
 });
 
 // Create other marker icons for different categories as needed
 var cityMarker = L.ExtraMarkers.icon({
-  icon: "fa-solid fa-building",
-  iconColor: "green",
-  shape: "square",
   prefix: "fa",
+  icon: "fa-city",
+  markerColor: "green",
+  shape: "square",
 });
 
 var universityMarker = L.ExtraMarkers.icon({
@@ -196,6 +239,7 @@ var stadiumMarker = L.ExtraMarkers.icon({
   iconColor: "purple",
   shape: "square",
   prefix: "fa",
+  markerColor: "yellow"
 });
 
 var greenIcon = L.icon({
@@ -963,4 +1007,20 @@ function closeModal5() {
 function closeModal6() {
   var modal = document.getElementById("myModal6");
   modal.style.display = "none";
+}
+
+function showToast(message, duration, close) {
+  Toastify({
+    text: message,
+    duration: duration,
+    newWindow: true,
+    close: close,
+    gravity: "top", // `top` or `bottom`
+    position: "center", // `left`, `center` or `right`
+    stopOnFocus: true, // Prevents dismissing of toast on hover
+    style: {
+      background: "#004687",
+    },
+    onClick: function () {}, // Callback after click
+  }).showToast();
 }
