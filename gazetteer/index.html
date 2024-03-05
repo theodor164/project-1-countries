@@ -208,13 +208,137 @@
   </div>
 </div>
 
-<!-- Modal4 -->
-<div id="myModal4" class="modal">
-  <div class="modal-content">
-    <span class="close" onclick="closeModal4()">&times;</span>
-    <div id="modal-content4"></div>
+
+
+<div id="weatherModal" class="modal fade" tabindex="-1" data-bs-backdrop="false" data-bs-keyboard="false" aria-labelledby="weatherModalLabel" aria-hidden="true">
+    
+  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+    
+    <div class="modal-content shadow">      
+        
+      <div class="modal-header bg-primary bg-gradient text-white">
+
+        <h5 class="modal-title" id="weatherModalLabel"></h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+
+      </div>
+
+      <div class="modal-body">
+        
+        <div id="pre-load"></div>
+
+        <div class="row">
+
+          <div class="col border m-2">
+
+            <p class="fw-bold fs-5 mt-1">TODAY</p>
+            
+            <div class="row">
+              
+              <div class="col text-center m-3">
+                
+                <p id="todayConditions" class="fw-bold fs-6"></p>
+                  
+              </div>
+              
+              <div class="col text-center">
+                
+                <img id="todayIcon" class="img-fluid mt-0" src="" alt="" title="">
+                  
+              </div>              
+
+              <div class="col text-center">
+                
+                <p class="fw-bold fs-4 mb-0"><span id="todayMaxTemp">3</span><sup>o</sup><span class="tempMetric">c</span></p>
+                <p class="fs-5 mt-0 text-secondary"><span id="todayMinTemp">-2</span><sup>o</sup><span class="tempMetric">c</span></p>
+                  
+              </div>              
+              
+            </div>
+
+          </div>   
+
+        </div>
+
+        <div class="row">
+
+          <div class="col border m-2">
+            
+            <div class="row">
+              
+              <div class="col text-center">
+
+                <p id="day1Date" class="fw-bold fs-6 mt-3"></p>
+                
+              </div>
+              
+            </div>
+            
+            <div class="row">
+              
+              <div class="col text-center">
+                
+                <p class="fw-bold fs-4 mb-0"><span id="day1MaxTemp"></span><sup>o</sup>c</p>
+                <p class="fs-5 mt-0 text-secondary"><span id="day1MinTemp"></span><sup>o</sup>c</p>
+                
+              </div>
+              
+              <div class="col text-center">
+                
+                <img id="day1Icon" src="" alt="" title="">
+                
+              </div>    
+              
+            </div>
+            
+          </div>   
+
+          <div class="col border m-2">
+
+            <div class="row">
+              
+              <div class="col text-center">
+
+                <p id="day2Date" class="fw-bold fs-6 mt-3">Fri 16th</p>
+                
+              </div>
+              
+            </div>
+            
+            <div class="row">
+              
+              <div class="col text-center">
+                
+                <p class="fw-bold fs-4 mb-0"><span id="day2MaxTemp"></span><sup>o</sup>c</p>
+                <p class="fs-5 mt-0 text-secondary"><span id="day2MinTemp"></span><sup>o</sup>c</p>
+                
+              </div>
+              
+              <div class="col text-center">
+                
+                <img id="day2Icon" src="" alt="" title="">
+                
+              </div>    
+              
+            </div>
+            
+          </div>         
+
+       </div>   
+    
+      </div>
+      
+      <div class="modal-footer">
+        <p class="fs-6 fw-light">Last updated <span id="lastUpdated"></span>. Powered by <a href="https://www.weatherapi.com/" target="_blank" title="Free Weather API">WeatherAPI.com</a></p>
+      </div>
+
+    </div>
+      
   </div>
+  
 </div>
+
+
 
 <!-- Modal5 -->
 <div id="myModal5" class="modal">
@@ -240,6 +364,7 @@
 <script src="bootstrap.min.js"></script>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
 <script src="numeral.min.js"></script>
+<script src="moment.min.js"></script>
 <script src="./scripts/leaflet.js"></script>
 <script src="./scripts/modal.js"></script>
 <script src="./scripts/countries.js"></script>

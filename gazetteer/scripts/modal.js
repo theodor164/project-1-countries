@@ -411,17 +411,33 @@ function fetchLocationInformation(country) {
                             function (btn, map) {
                               $("#countryInfoModal").modal("show");
 
-                              $("#capitalCity").html(moreInfo.geonames[0].capital);
-                              $("#continent").html(locationInfo.results[0].components.continent);
-                              $("#languages").html(moreInfo.geonames[0].languages);
-                              $("#currency").html(moreInfo.geonames[0].currencyCode);
-                              $("#isoAlpha2").html(moreInfo.geonames[0].countryCode);
-                              $("#isoAlpha3").html(moreInfo.geonames[0].isoAlpha3);
+                              $("#capitalCity").html(
+                                moreInfo.geonames[0].capital
+                              );
+                              $("#continent").html(
+                                locationInfo.results[0].components.continent
+                              );
+                              $("#languages").html(
+                                moreInfo.geonames[0].languages
+                              );
+                              $("#currency").html(
+                                moreInfo.geonames[0].currencyCode
+                              );
+                              $("#isoAlpha2").html(
+                                moreInfo.geonames[0].countryCode
+                              );
+                              $("#isoAlpha3").html(
+                                moreInfo.geonames[0].isoAlpha3
+                              );
                               $("#population").html(
-                                numeral(moreInfo.geonames[0].population).format("0,0")
+                                numeral(moreInfo.geonames[0].population).format(
+                                  "0,0"
+                                )
                               );
                               $("#areaInSqKm").html(
-                                numeral(moreInfo.geonames[0].areaInSqKm).format("0,0")
+                                numeral(moreInfo.geonames[0].areaInSqKm).format(
+                                  "0,0"
+                                )
                               );
                               $("#postalCodeFormat").html(
                                 moreInfo.geonames[0].postalCodeFormat == ""
@@ -523,95 +539,82 @@ function fetchLocationInformation(country) {
                             '<i class="fa-solid fa-cloud"></i>',
                             function (btn, map) {
                               // Get references to the modal and modal content
-                              var modal = $("#myModal4");
-                              var modalContent = $("#modal-content4");
-                              var date1 = new Date(
-                                weatherForecastCity.forecast.forecastday[1].date
-                              );
-                              var dayOfWeek1 = date1.getDay();
-                              var days = [
-                                "Sunday",
-                                "Monday",
-                                "Tuesday",
-                                "Wednesday",
-                                "Thursday",
-                                "Friday",
-                                "Saturday",
-                              ];
-                              var dayOfWeekString1 = days[dayOfWeek1];
-                              var date2 = new Date(
-                                weatherForecastCity.forecast.forecastday[2].date
-                              );
-                              var dayOfWeek2 = date2.getDay();
-                              var dayOfWeekString2 = days[dayOfWeek2];
 
-                              var weatherContent = `
-                              <p class="color-blue center-the-text">Weather forecast</p>
-                              <div class="row">
-                                <div class="col-md-4">
-                                <div>${moreInfo.geonames[0].capital}, ${
-                                locationInfo.results[0].components.country
-                              }</div>
-                                </div>
-                                <div class="col-md-4" id="today-forecast">
-                                <div><img src="http:${
-                                  weatherForecastCity.forecast.forecastday[0]
-                                    .day.condition.icon
-                                }"><span style="font-size: 2.5rem">${numeral(
+                              $("#weatherModal").modal("show");
+
+                              $("#weatherModalLabel").html(
+                                moreInfo.geonames[0].capital +
+                                  ", " +
+                                  locationInfo.results[0].components.country
+                              );
+
+                              $("#todayConditions").html(
+                                weatherForecastCity.forecast.forecastday[0].day
+                                  .condition.text
+                              );
+
+                              $("#todayIcon").attr(
+                                "src",
+                                weatherForecastCity.forecast.forecastday[0].day
+                                  .condition.icon
+                              );
+
+                              $("#todayMaxTemp").html(
                                 weatherForecastCity.forecast.forecastday[0].day
                                   .maxtemp_c
-                              ).format("0,0.0")}</span>°C</div>
-                                <div class="col-md-12">${
-                                  weatherForecastCity.forecast.forecastday[0]
-                                    .day.condition.text
-                                }</div>
-                                </div>
-                                <div class="col-md-4">
-                                <div><p>Humidity: ${numeral(
-                                  weatherForecastCity.forecast.forecastday[0]
-                                    .day.avghumidity
-                                ).format("0,0.0")}%</p><p>Wind: ${numeral(
+                              );
+
+                              $("#todayMinTemp").html(
                                 weatherForecastCity.forecast.forecastday[0].day
-                                  .maxwind_kph
-                              ).format("0,0.0")} kph</p></div>
-                                </div>
-                                </div> 
-                                <div class="row">
-                                <div class="col-md-6 row" id="tomorrow">
-                                <div class="col-md-6">
-                                <p>${dayOfWeekString1}:</p><p>${numeral(
+                                  .mintemp_c
+                              );
+
+                              $("#day1Date").text(
+                                moment(
+                                  weatherForecastCity.forecast.forecastday[1].date,
+                                  "YYYY-MM-DD"
+                                ).format("ddd Do")
+                              );
+                              $("#day1Icon").attr(
+                                "src",
+                                weatherForecastCity.forecast.forecastday[1].day
+                                  .condition.icon
+                              );
+                              $("#day1MinTemp").text(
+                                weatherForecastCity.forecast.forecastday[1].day
+                                  .mintemp_c
+                              );
+                              $("#day1MaxTemp").text(
                                 weatherForecastCity.forecast.forecastday[1].day
                                   .maxtemp_c
-                              ).format("0,0.0")}°C</p>
-                                </div>
-                                <div class="col-md-6">
-                                <img src="http:${
-                                  weatherForecastCity.forecast.forecastday[1]
-                                    .day.condition.icon
-                                }">
-                                </div>
-                                </div> 
-                                <div class="col-md-6 row">
-                                  <div class="col-md-6">
-                                  <p>${dayOfWeekString2}:</p><p>${numeral(
+                              );
+
+                              $("#day2Date").text(
+                                moment(
+                                  weatherForecastCity.forecast.forecastday[2].date,
+                                  "YYYY-MM-DD"
+                                ).format("ddd Do")
+                              );
+                              $("#day2Icon").attr(
+                                "src",
+                                weatherForecastCity.forecast.forecastday[2].day
+                                  .condition.icon
+                              );
+                              $("#day2MinTemp").text(
+                                weatherForecastCity.forecast.forecastday[2].day
+                                  .mintemp_c
+                              );
+                              $("#day2MaxTemp").text(
                                 weatherForecastCity.forecast.forecastday[2].day
                                   .maxtemp_c
-                              ).format("0,0.0")}°C</p>
-                                  </div>
-                                  <div class="col-md-6">
-                                  <img src="http:${
-                                    weatherForecastCity.forecast.forecastday[2]
-                                      .day.condition.icon
-                                  }">
-                                  </div>
-                                  </div> 
-                                  </div>
-                                  `;
+                              );
 
-                              modalContent.html(weatherContent);
-
-                              // Display the modal
-                              modal.css("display", "block");
+                              $("#lastUpdated").text(
+                                moment(
+                                  weatherForecastCity.current.last_updated,
+                                  "YYYY-MM-DD"
+                                ).format("HH:mm, Do MMM")
+                              );
                             }
                           ).addTo(map);
                         },
