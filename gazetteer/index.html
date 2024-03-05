@@ -40,11 +40,164 @@
   </div>
   
   <!-- Modal2 -->
-  <div id="myModal2" class="modal">
-    <div class="modal-content">
-      <span class="close" onclick="closeModal2()">&times;</span>
-      <div id="modal-content2"></div>
+  
+  <div id="countryInfoModal" class="modal" data-bs-backdrop="false" tabindex="-1">
+  
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+      
+      <div class="modal-content shadow">
+        
+        <div class="modal-header bg-success bg-gradient text-white">
+          <h5 class="modal-title"><i class="fa-solid fa-circle-info fa-xl me-2"></i>At a glance</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>           
+        
+        <div class="modal-body">
+          
+          <div id="pre-load"></div>
+          
+          <table class="table table-striped">
+            
+            <tr>
+  
+              <td class="text-center col-2">
+                <i class="fa-solid fa-landmark-flag fa-xl text-success"></i>
+              </td>
+  
+              <td class="text-nowrap">
+                Capital city
+              </td>
+  
+              <td id="capitalCity" class="text-end"> 
+              </td>
+  
+            </tr>
+            <tr>
+  
+              <td class="text-center">
+                <i class="fa-solid fa-globe fa-xl text-success"></i>
+              </td>
+  
+              <td>
+                Continent
+              </td>
+  
+              <td id="continent" class="text-end">              
+              </td>
+  
+            </tr>
+            <tr>
+  
+              <td class="text-center">
+                <i class="fa-solid fa-ear-listen fa-xl text-success"></i>
+              </td>
+  
+              <td>
+                Languages
+              </td>
+  
+              <td id="languages" class="text-end">
+              </td>
+  
+            </tr>
+            <tr>
+  
+              <td class="text-center">
+                <i class="fa-solid fa-coins fa-xl text-success"></i>
+              </td>
+  
+              <td>
+                Currency
+              </td>
+  
+              <td id="currency" class="text-end">
+              </td>
+  
+            </tr>
+            <tr>
+  
+              <td class="text-center">
+                <i class="fa-solid fa-equals fa-xl text-success"></i>
+              </td>
+  
+              <td class="text-nowrap">
+                ISO alpha 2
+              </td>
+  
+              <td id="isoAlpha2" class="text-end">
+              </td>
+  
+            </tr>
+            <tr>
+  
+              <td class="text-center">
+                <i class="fa-solid fa-bars fa-xl text-success"></i>
+              </td>
+  
+              <td class="text-nowrap">
+                ISO alpha 3
+              </td>
+  
+              <td id="isoAlpha3" class="text-end">
+              </td>
+  
+            </tr>
+            <tr>
+  
+              <td class="text-center">
+                <i class="fa-solid fa-person fa-xl text-success"></i>
+              </td>
+  
+              <td>
+                Population
+              </td>
+  
+              <td id="population" class="text-end">
+              </td>
+  
+            </tr>
+            <tr>
+  
+              <td class="text-center">
+                <i class="fa-solid fa-ruler-combined fa-xl text-success"></i>
+              </td>
+  
+              <td class="text-nowrap">
+                Area (km<sup>2</sup>)
+              </td>
+  
+              <td id="areaInSqKm" class="text-end">
+              </td>
+  
+            </tr>
+            <tr>
+  
+              <td class="text-center">
+                <i class="fa-solid fa-envelope fa-xl text-success"></i>
+              </td>
+  
+              <td class="text-nowrap">
+                Postal code format
+              </td>
+  
+              <td id="postalCodeFormat" class="text-end">
+                
+              </td>
+  
+            </tr>
+  
+          </table>
+          
+        </div>
+        
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-success btn-sm" data-bs-dismiss="modal">Close</button>
+        </div>
+        
+      </div>
+      
     </div>
+    
   </div>
 
   <!-- Modal3 -->

@@ -239,7 +239,7 @@ var stadiumMarker = L.ExtraMarkers.icon({
   iconColor: "purple",
   shape: "square",
   prefix: "fa",
-  markerColor: "yellow"
+  markerColor: "yellow",
 });
 
 var greenIcon = L.icon({
@@ -283,7 +283,6 @@ let leafIndex = 0;
 // Add an onchange event listener to the country selection input
 
 function onMapClick(e) {
-
   let marker = L.marker([e.latlng.lat, e.latlng.lng], {
     icon: leafs[leafIndex % 3],
   });
@@ -410,23 +409,27 @@ function fetchLocationInformation(country) {
                           button1 = L.easyButton(
                             '<i class="fa-solid fa-circle-info"></i>',
                             function (btn, map) {
-                              var modal = $("#myModal2");
-                              var modalContent = $("#modal-content2");
+                              $("#countryInfoModal").modal("show");
 
-                              // Populate modal content with location information
-                              var locationContent = `
-                            <p class="color-blue center-the-text">Location Info:</p>
-                            <p><i class="fa-solid fa-earth-americas"></i>Country: ${locationInfo.results[0].components.country} / <i class="fa-solid fa-city"></i>Capital city: ${moreInfo.geonames[0].capital}</p>
-                            <p><i class="fa-solid fa-person"></i>Population: ${numeral(moreInfo.geonames[0].population).format("0,0")}<img id="population-icon" src="./marker-icons/population.png" alt="population-icon"></p>
-                            <p><i class="fa-solid fa-address-book"></i>Address: ${locationInfo.results[0].formatted}</p>
-                            <p><i class="fa-solid fa-flag"></i>Flag: ${locationInfo.results[0].annotations.flag}</p>
-                            <p><i class="fa-solid fa-dollar-sign"></i>Currency: ${locationInfo.results[0].annotations.currency.name}</p>
-                            `;
-                              // Set modal content
-                              modalContent.html(locationContent);
+                              $("#capitalCity").html(moreInfo.geonames[0].capital);
+                              $("#continent").html(locationInfo.results[0].components.continent);
+                              $("#languages").html(moreInfo.geonames[0].languages);
+                              $("#currency").html(moreInfo.geonames[0].currencyCode);
+                              $("#isoAlpha2").html(moreInfo.geonames[0].countryCode);
+                              $("#isoAlpha3").html(moreInfo.geonames[0].isoAlpha3);
+                              $("#population").html(
+                                numeral(moreInfo.geonames[0].population).format("0,0")
+                              );
+                              $("#areaInSqKm").html(
+                                numeral(moreInfo.geonames[0].areaInSqKm).format("0,0")
+                              );
+                              $("#postalCodeFormat").html(
+                                moreInfo.geonames[0].postalCodeFormat == ""
+                                  ? "n/a"
+                                  : moreInfo.geonames[0].postalCodeFormat
+                              );
 
-                              // Display the modal
-                              modal.css("display", "block");
+                              $("#pre-load").addClass("fadeOut");
                             }
                           ).addTo(map);
                           button2 = L.easyButton(
@@ -464,8 +467,8 @@ function fetchLocationInformation(country) {
                                     locationInfo.results[0].annotations.currency
                                       .iso_code
                                   ]; // Example exchange rate
-                                  var result = currencyValue * exchangeRate; // Calculate the result
-                                  result = numeral(result).format("0,0.0000"); // Calculate the result
+                                var result = currencyValue * exchangeRate; // Calculate the result
+                                result = numeral(result).format("0,0.0000"); // Calculate the result
 
                                 // Set the value of the exchangeResult input field to the calculated result
                                 $("#exchangeResult").val(result);
@@ -546,31 +549,60 @@ function fetchLocationInformation(country) {
                               <p class="color-blue center-the-text">Weather forecast</p>
                               <div class="row">
                                 <div class="col-md-4">
-                                <div>${moreInfo.geonames[0].capital}, ${locationInfo.results[0].components.country}</div>
+                                <div>${moreInfo.geonames[0].capital}, ${
+                                locationInfo.results[0].components.country
+                              }</div>
                                 </div>
                                 <div class="col-md-4" id="today-forecast">
-                                <div><img src="http:${weatherForecastCity.forecast.forecastday[0].day.condition.icon}"><span style="font-size: 2.5rem">${numeral(weatherForecastCity.forecast.forecastday[0].day.maxtemp_c).format('0,0.0')}</span>°C</div>
-                                <div class="col-md-12">${weatherForecastCity.forecast.forecastday[0].day.condition.text}</div>
+                                <div><img src="http:${
+                                  weatherForecastCity.forecast.forecastday[0]
+                                    .day.condition.icon
+                                }"><span style="font-size: 2.5rem">${numeral(
+                                weatherForecastCity.forecast.forecastday[0].day
+                                  .maxtemp_c
+                              ).format("0,0.0")}</span>°C</div>
+                                <div class="col-md-12">${
+                                  weatherForecastCity.forecast.forecastday[0]
+                                    .day.condition.text
+                                }</div>
                                 </div>
                                 <div class="col-md-4">
-                                <div><p>Humidity: ${numeral(weatherForecastCity.forecast.forecastday[0].day.avghumidity).format('0,0.0')}%</p><p>Wind: ${numeral(weatherForecastCity.forecast.forecastday[0].day.maxwind_kph).format('0,0.0')} kph</p></div>
+                                <div><p>Humidity: ${numeral(
+                                  weatherForecastCity.forecast.forecastday[0]
+                                    .day.avghumidity
+                                ).format("0,0.0")}%</p><p>Wind: ${numeral(
+                                weatherForecastCity.forecast.forecastday[0].day
+                                  .maxwind_kph
+                              ).format("0,0.0")} kph</p></div>
                                 </div>
                                 </div> 
                                 <div class="row">
                                 <div class="col-md-6 row" id="tomorrow">
                                 <div class="col-md-6">
-                                <p>${dayOfWeekString1}:</p><p>${numeral(weatherForecastCity.forecast.forecastday[1].day.maxtemp_c).format('0,0.0')}°C</p>
+                                <p>${dayOfWeekString1}:</p><p>${numeral(
+                                weatherForecastCity.forecast.forecastday[1].day
+                                  .maxtemp_c
+                              ).format("0,0.0")}°C</p>
                                 </div>
                                 <div class="col-md-6">
-                                <img src="http:${weatherForecastCity.forecast.forecastday[1].day.condition.icon}">
+                                <img src="http:${
+                                  weatherForecastCity.forecast.forecastday[1]
+                                    .day.condition.icon
+                                }">
                                 </div>
                                 </div> 
                                 <div class="col-md-6 row">
                                   <div class="col-md-6">
-                                  <p>${dayOfWeekString2}:</p><p>${numeral(weatherForecastCity.forecast.forecastday[2].day.maxtemp_c).format('0,0.0')}°C</p>
+                                  <p>${dayOfWeekString2}:</p><p>${numeral(
+                                weatherForecastCity.forecast.forecastday[2].day
+                                  .maxtemp_c
+                              ).format("0,0.0")}°C</p>
                                   </div>
                                   <div class="col-md-6">
-                                  <img src="http:${weatherForecastCity.forecast.forecastday[2].day.condition.icon}">
+                                  <img src="http:${
+                                    weatherForecastCity.forecast.forecastday[2]
+                                      .day.condition.icon
+                                  }">
                                   </div>
                                   </div> 
                                   </div>
