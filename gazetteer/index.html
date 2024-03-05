@@ -201,12 +201,63 @@
   </div>
 
   <!-- Modal3 -->
-  <div id="myModal3" class="modal">
-    <div class="modal-content">
-    <span class="close" onclick="closeModal3()">&times;</span>
-    <div id="modal-content3"></div>
+  
+  
+  <div id="exampleModal2" class="modal fade" tabindex="-1" data-bs-backdrop="false" data-bs-keyboard="false" aria-labelledby="exampleModalLabel" aria-hidden="true">
+
+    <!--   the last two classes centre the modal and, if the content is too long, ensures  -->
+    <!--   that the header and footer are always on display by making the body scroll -->
+  
+    <div class="modal-dialog modal-sm modal-dialog-centered modal-dialog-scrollable">
+  
+      <div class="modal-content shadow">
+  
+        <div class="modal-header bg-secondary bg-gradient text-white">
+          <h5 class="modal-title">Currency calculator</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+  
+        <div class="modal-body">
+  
+          <form>
+  
+            <div class="form-floating mb-3">
+  
+              <input id="fromAmount" type="number" class="form-control" value="1" min="1" step="1">
+              <label id="fromCurrency"></label>
+  
+            </div>
+  
+            <div class="form-floating mb-3">
+  
+              <select id="exchangeRate" class="form-select">
+                
+              </select>
+              
+              <label for="exchangeRate">Convert to</label>
+  
+            </div>
+  
+            <div class="form-floating">
+  
+              <input id="toAmount" type="text" class="form-control" disabled>
+              <label for="toAmount">Result</label>
+  
+            </div>
+  
+          </form>
+  
+        </div>
+  
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-secondary btn-sm myBtn" data-bs-dismiss="modal">CLOSE</button>
+        </div>
+  
+      </div>
+  
+    </div>
+  
   </div>
-</div>
 
 
 

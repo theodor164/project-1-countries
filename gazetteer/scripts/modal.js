@@ -345,6 +345,7 @@ function fetchLocationInformation(country) {
           $.ajax({
             url: "./scripts/getCurrentExchangeRate.php",
             type: "GET",
+            data: { currency: moreInfo.geonames[0].currencyCode },
             success: function (response) {
               if (!response) {
                 console.error("Empty response received.");
@@ -451,46 +452,51 @@ function fetchLocationInformation(country) {
                           button2 = L.easyButton(
                             '<i class="fas fa-dollar-sign"></i>',
                             function (btn, map) {
-                              var modal = $("#myModal3");
-                              var modalContent = $("#modal-content3");
+                              $("#exampleModal2").modal("show");
 
-                              var exchangeContent = `
-          <p class="color-blue center-the-text">Currency Calculator</p>
-          <div class="row">
-          <div class="col-md-6">
-          <label for="currencyInput">Currency:</label>
-          <input type="text" id="currencyInput" class="form-control" placeholder="Enter currency">
-          ${locationInfo.results[0].annotations.currency.iso_code}
-          </div>
-          <div class="col-md-6">
-          <label for="exchangeResult">Exchange Result:</label>
-          <input type="text" id="exchangeResult" class="form-control" readonly>
-          USD
-          </div>
-          </div>
-          `;
-                              // Set modal content
-                              modalContent.html(exchangeContent);
-                              $("#currencyInput").on("input", function () {
-                                // Get the value entered in the currencyInput field
-                                var currencyValue = $(this).val();
+                              $("#fromCurrency").html(
+                                `From ${moreInfo.geonames[0].currencyCode}`
+                              );
 
-                                // Perform your calculation or fetch exchange rate here
-                                // For demonstration, let's assume a simple calculation
-                                var exchangeRate =
-                                  1 /
-                                  exchangeInfo.rates[
-                                    locationInfo.results[0].annotations.currency
-                                      .iso_code
-                                  ]; // Example exchange rate
-                                var result = currencyValue * exchangeRate; // Calculate the result
-                                result = numeral(result).format("0,0.0000"); // Calculate the result
+                              const selectElement =
+                                document.getElementById("exchangeRate");
+                                selectElement.innerHTML='';
+                              for (const currencyCode in exchangeInfo.data) {
+                                const currencyData =
+                                  exchangeInfo.data[currencyCode];
+                                const option = document.createElement("option");
+                                option.value = currencyData.value;
+                                option.text = currencyData.code;
+                                selectElement.appendChild(option);
+                              }
 
-                                // Set the value of the exchangeResult input field to the calculated result
-                                $("#exchangeResult").val(result);
+                              function calcResult() {
+                                $("#toAmount").val(
+                                  numeral(
+                                    $("#fromAmount").val() *
+                                      $("#exchangeRate").val()
+                                  ).format("0,0.00")
+                                );
+                              }
+
+                              $("#fromAmount").on("keyup", function () {
+                                calcResult();
                               });
-                              // Display the modal
-                              modal.css("display", "block");
+
+                              $("#fromAmount").on("change", function () {
+                                calcResult();
+                              });
+
+                              $("#exchangeRate").on("change", function () {
+                                calcResult();
+                              });
+
+                              $("#exampleModal").on(
+                                "show.bs.modal",
+                                function () {
+                                  calcResult();
+                                }
+                              );
                             }
                           ).addTo(map);
 
@@ -515,29 +521,63 @@ function fetchLocationInformation(country) {
                           button4 = L.easyButton(
                             '<i class="fa-solid fa-newspaper"></i>',
                             function (btn, map) {
-
                               $("#exampleModal").modal("show");
-                              
-                              $("#first-image").attr("src", newsLinks.results[0].image_url);
-                              $("#first-link").attr("href", newsLinks.results[0].link);
+
+                              $("#first-image").attr(
+                                "src",
+                                newsLinks.results[0].image_url
+                              );
+                              $("#first-link").attr(
+                                "href",
+                                newsLinks.results[0].link
+                              );
                               $("#first-link").html(newsLinks.results[0].title);
-                              $("#first-source").html(newsLinks.results[0].source_id);
+                              $("#first-source").html(
+                                newsLinks.results[0].source_id
+                              );
 
-                              $("#second-image").attr("src", newsLinks.results[1].image_url);
-                              $("#second-link").attr("href", newsLinks.results[1].link);
-                              $("#second-link").html(newsLinks.results[1].title);
-                              $("#second-source").html(newsLinks.results[1].source_id);
+                              $("#second-image").attr(
+                                "src",
+                                newsLinks.results[1].image_url
+                              );
+                              $("#second-link").attr(
+                                "href",
+                                newsLinks.results[1].link
+                              );
+                              $("#second-link").html(
+                                newsLinks.results[1].title
+                              );
+                              $("#second-source").html(
+                                newsLinks.results[1].source_id
+                              );
 
-                              $("#third-image").attr("src", newsLinks.results[2].image_url);
-                              $("#third-link").attr("href", newsLinks.results[2].link);
+                              $("#third-image").attr(
+                                "src",
+                                newsLinks.results[2].image_url
+                              );
+                              $("#third-link").attr(
+                                "href",
+                                newsLinks.results[2].link
+                              );
                               $("#third-link").html(newsLinks.results[2].title);
-                              $("#third-source").html(newsLinks.results[2].source_id);
+                              $("#third-source").html(
+                                newsLinks.results[2].source_id
+                              );
 
-                              $("#fourth-image").attr("src", newsLinks.results[3].image_url);
-                              $("#fourth-link").attr("href", newsLinks.results[3].link);
-                              $("#fourth-link").html(newsLinks.results[3].title);
-                              $("#fourth-source").html(newsLinks.results[3].source_id);
-
+                              $("#fourth-image").attr(
+                                "src",
+                                newsLinks.results[3].image_url
+                              );
+                              $("#fourth-link").attr(
+                                "href",
+                                newsLinks.results[3].link
+                              );
+                              $("#fourth-link").html(
+                                newsLinks.results[3].title
+                              );
+                              $("#fourth-source").html(
+                                newsLinks.results[3].source_id
+                              );
                             }
                           ).addTo(map);
                           button5 = L.easyButton(
@@ -576,7 +616,8 @@ function fetchLocationInformation(country) {
 
                               $("#day1Date").text(
                                 moment(
-                                  weatherForecastCity.forecast.forecastday[1].date,
+                                  weatherForecastCity.forecast.forecastday[1]
+                                    .date,
                                   "YYYY-MM-DD"
                                 ).format("ddd Do")
                               );
@@ -596,7 +637,8 @@ function fetchLocationInformation(country) {
 
                               $("#day2Date").text(
                                 moment(
-                                  weatherForecastCity.forecast.forecastday[2].date,
+                                  weatherForecastCity.forecast.forecastday[2]
+                                    .date,
                                   "YYYY-MM-DD"
                                 ).format("ddd Do")
                               );

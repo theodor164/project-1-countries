@@ -1,8 +1,8 @@
 <?php
 
-$apiKey = '8fc01928d8cf4ffc99b70516409cc86c';
+$currency = $_GET['currency'];
 
-$apiUrl = "https://openexchangerates.org/api/latest.json?app_id={$apiKey}";
+$apiUrl = "https://api.currencyapi.com/v3/latest?apikey=cur_live_LXPd69rBahjJT4x4AXGKrqmJ6TthFof6Kq0Vv1Lw&base_currency={$currency}";
 
 $response = file_get_contents($apiUrl);
 
