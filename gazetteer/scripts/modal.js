@@ -503,19 +503,8 @@ function fetchLocationInformation(country) {
                           button3 = L.easyButton(
                             '<i class="fa-brands fa-wikipedia-w"></i>',
                             function (btn, map) {
-                              var modal = $("#myModal5");
-                              var modalContent = $("#modal-content5");
-                              var content = `
-                                <p id="useful-info" class="center-the-text color-blue">Useful Info:</p>
-            <p><a href="http://${wikipediaLinks.geonames[0].wikipediaUrl}">${wikipediaLinks.geonames[0].title}</a></p>
-            <p><a href="http://${wikipediaLinks.geonames[1].wikipediaUrl}">${wikipediaLinks.geonames[1].title}</a></p>
-            <p><a href="http://${wikipediaLinks.geonames[2].wikipediaUrl}">${wikipediaLinks.geonames[2].title}</a></p>
-            <p><a href="http://${wikipediaLinks.geonames[3].wikipediaUrl}">${wikipediaLinks.geonames[3].title}</a></p>
-            <p><a href="http://${wikipediaLinks.geonames[4].wikipediaUrl}">${wikipediaLinks.geonames[4].title}</a></p>
-            `;
-
-                              modalContent.html(content);
-                              modal.css("display", "block");
+                              $("#wikiModal").modal("show");
+                              $("#wikipediaLink").attr("href", `http://${wikipediaLinks.geonames[0].wikipediaUrl}`)
                             }
                           ).addTo(map);
                           button4 = L.easyButton(

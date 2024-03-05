@@ -392,11 +392,45 @@
 
 
 <!-- Modal5 -->
-<div id="myModal5" class="modal">
-  <div class="modal-content">
-    <span class="close" onclick="closeModal5()">&times;</span>
-    <div id="modal-content5"></div>
+<div id="wikiModal" class="modal" data-bs-backdrop="false" tabindex="-1">
+  
+  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+    
+    <div class="modal-content shadow">
+      
+      <div class="modal-header bg-success bg-gradient text-white">
+        <h5 class="modal-title"><i class="fa-solid fa-circle-info fa-xl me-2"></i>Wikipedia Info</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>           
+      
+      <div class="modal-body">
+                
+        <table class="table table-striped">
+          
+          <tr>
+
+            
+
+            <td  class="text-nowrap">
+              <a id="wikipediaLink" href="">Country Info</a>
+            </td>
+
+            <td id="capitalCity" class="text-end"> 
+            </td>
+
+          </tr>
+        </table>
+        
+      </div>
+      
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-success btn-sm" data-bs-dismiss="modal">Close</button>
+      </div>
+      
+    </div>
+    
   </div>
+  
 </div>
 
 
