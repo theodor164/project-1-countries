@@ -252,12 +252,16 @@ function removeAllMarkers() {
   stadiumLayer.clearLayers();
 }
 
-
 function fetchLocationInformation(country) {
   var modal = document.getElementById("myModal");
   modal.style.display = "block";
   document.querySelector("#info").innerHTML = `<div id="loader"></div>`;
   document.getElementById("loader").style.display = "block";
+  if (button1) button1.remove();
+  if (button2) button2.remove();
+  if (button3) button3.remove();
+  if (button4) button4.remove();
+  if (button5) button5.remove();
   $.ajax({
     url: "./scripts/getLocationInfoCountry.php",
     type: "GET",
@@ -343,11 +347,7 @@ function fetchLocationInformation(country) {
                               error
                             );
                           }
-                          if (button1) button1.remove();
-                          if (button2) button2.remove();
-                          if (button3) button3.remove();
-                          if (button4) button4.remove();
-                          if (button5) button5.remove();
+
                           document.getElementById("loader").style.display =
                             "none";
                           modal.style.display = "none";
@@ -404,7 +404,7 @@ function fetchLocationInformation(country) {
 
                               const selectElement =
                                 document.getElementById("exchangeRate");
-                                selectElement.innerHTML='';
+                              selectElement.innerHTML = "";
                               for (const currencyCode in exchangeInfo.data) {
                                 const currencyData =
                                   exchangeInfo.data[currencyCode];
@@ -448,7 +448,13 @@ function fetchLocationInformation(country) {
                             '<i class="fa-brands fa-wikipedia-w"></i>',
                             function (btn, map) {
                               $("#wikiModal").modal("show");
-                              $("#wikipediaLink").attr("href", `http://${wikipediaLinks.geonames[0].wikipediaUrl}`)
+                              $("#wikipediaLink").attr(
+                                "href",
+                                `http://${wikipediaLinks.geonames[0].wikipediaUrl}`
+                              );
+                              $("#wikipedia-summary").html(
+                                wikipediaLinks.geonames[0].summary
+                              );
                             }
                           ).addTo(map);
                           button4 = L.easyButton(
@@ -538,13 +544,17 @@ function fetchLocationInformation(country) {
                               );
 
                               $("#todayMaxTemp").html(
-                                numeral(weatherForecastCity.forecast.forecastday[0].day
-                                  .maxtemp_c).format('0')
+                                numeral(
+                                  weatherForecastCity.forecast.forecastday[0]
+                                    .day.maxtemp_c
+                                ).format("0")
                               );
 
                               $("#todayMinTemp").html(
-                                numeral(weatherForecastCity.forecast.forecastday[0].day
-                                  .mintemp_c).format('0')
+                                numeral(
+                                  weatherForecastCity.forecast.forecastday[0]
+                                    .day.mintemp_c
+                                ).format("0")
                               );
 
                               $("#day1Date").text(
@@ -560,12 +570,16 @@ function fetchLocationInformation(country) {
                                   .condition.icon
                               );
                               $("#day1MinTemp").text(
-                                numeral(weatherForecastCity.forecast.forecastday[1].day
-                                  .mintemp_c).format('0')
+                                numeral(
+                                  weatherForecastCity.forecast.forecastday[1]
+                                    .day.mintemp_c
+                                ).format("0")
                               );
                               $("#day1MaxTemp").text(
-                                numeral(weatherForecastCity.forecast.forecastday[1].day
-                                  .maxtemp_c).format('0')
+                                numeral(
+                                  weatherForecastCity.forecast.forecastday[1]
+                                    .day.maxtemp_c
+                                ).format("0")
                               );
 
                               $("#day2Date").text(
@@ -581,12 +595,16 @@ function fetchLocationInformation(country) {
                                   .condition.icon
                               );
                               $("#day2MinTemp").text(
-                                numeral(weatherForecastCity.forecast.forecastday[2].day
-                                  .mintemp_c).format('0')
+                                numeral(
+                                  weatherForecastCity.forecast.forecastday[2]
+                                    .day.mintemp_c
+                                ).format("0")
                               );
                               $("#day2MaxTemp").text(
-                                numeral(weatherForecastCity.forecast.forecastday[2].day
-                                  .maxtemp_c).format('0')
+                                numeral(
+                                  weatherForecastCity.forecast.forecastday[2]
+                                    .day.maxtemp_c
+                                ).format("0")
                               );
 
                               $("#lastUpdated").text(
@@ -674,8 +692,6 @@ function formatNumber(value) {
   return numeral(value).format("0,0");
 }
 
-$('#countryInfoModal').on('hidden.bs.modal', function (e) {
-
-  $('#pre-load').removeClass("fadeOut");
-  
+$("#countryInfoModal").on("hidden.bs.modal", function (e) {
+  $("#pre-load").removeClass("fadeOut");
 });
