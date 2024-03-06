@@ -15,7 +15,7 @@ $.ajax({
         value: country.iso_a2,
         text: country.name
       });
-      option.addClass('text-center'); // Adding class 'text-center'
+      // option.addClass('text-center'); // Adding class 'text-center'
       select.append(option);
     });
   }

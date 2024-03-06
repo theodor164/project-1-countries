@@ -104,7 +104,6 @@ $(document).ready(function () {
 function handleCheckboxChange(layer, scriptUrl, id, layerName) {
   var isChecked = $(id).is(":checked");
   if (isChecked) {
-    showToast(`Getting ${layerName} markers`, 1500, false);
     // Call the function to fetch and display markers
     handleCountrySelection2(layer, scriptUrl, layerName);
   } else {
@@ -242,58 +241,7 @@ var stadiumMarker = L.ExtraMarkers.icon({
   markerColor: "yellow",
 });
 
-var greenIcon = L.icon({
-  iconUrl: "./marker-icons/leaf-green.png",
-  shadowUrl: "./marker-icons/leaf-shadow.png",
-
-  iconSize: [38, 95], // size of the icon
-  shadowSize: [50, 64], // size of the shadow
-  iconAnchor: [22, 94], // point of the icon which will correspond to marker's location
-  shadowAnchor: [4, 62], // the same for the shadow
-  popupAnchor: [-3, -76], // point from which the popup should open relative to the iconAnchor
-});
-
-var redIcon = L.icon({
-  iconUrl: "./marker-icons/leaf-red.png",
-  shadowUrl: "./marker-icons/leaf-shadow.png",
-
-  iconSize: [38, 95], // size of the icon
-  shadowSize: [50, 64], // size of the shadow
-  iconAnchor: [22, 94], // point of the icon which will correspond to marker's location
-  shadowAnchor: [4, 62], // the same for the shadow
-  popupAnchor: [-3, -76], // point from which the popup should open relative to the iconAnchor
-});
-
-var orangeIcon = L.icon({
-  iconUrl: "./marker-icons/leaf-orange.png",
-  shadowUrl: "./marker-icons/leaf-shadow.png",
-
-  iconSize: [38, 95], // size of the icon
-  shadowSize: [50, 64], // size of the shadow
-  iconAnchor: [22, 94], // point of the icon which will correspond to marker's location
-  shadowAnchor: [4, 62], // the same for the shadow
-  popupAnchor: [-3, -76], // point from which the popup should open relative to the iconAnchor
-});
-
 var button1, button2, button3, button4, button5;
-
-const leafs = [greenIcon, redIcon, orangeIcon];
-let leafIndex = 0;
-
-// Add an onchange event listener to the country selection input
-
-function onMapClick(e) {
-  let marker = L.marker([e.latlng.lat, e.latlng.lng], {
-    icon: leafs[leafIndex % 3],
-  });
-  marker.bindPopup(`lat: ${e.latlng.lat}, lng: ${e.latlng.lng}`);
-  selectedPinsCluster.addLayer(marker);
-  map.addLayer(selectedPinsCluster);
-
-  leafIndex++;
-}
-
-map.on("click", onMapClick);
 
 // Function to remove all markers
 function removeAllMarkers() {
@@ -304,10 +252,6 @@ function removeAllMarkers() {
   stadiumLayer.clearLayers();
 }
 
-// Create an easyButton to remove all markers
-L.easyButton('<i class="fas fa-trash-alt"></i>', function (btn, map) {
-  removeAllMarkers();
-}).addTo(map);
 
 function fetchLocationInformation(country) {
   var modal = document.getElementById("myModal");
@@ -724,24 +668,14 @@ function closeModal6() {
   modal.style.display = "none";
 }
 
-function showToast(message, duration, close) {
-  Toastify({
-    text: message,
-    duration: duration,
-    newWindow: true,
-    close: close,
-    gravity: "top", // `top` or `bottom`
-    position: "center", // `left`, `center` or `right`
-    stopOnFocus: true, // Prevents dismissing of toast on hover
-    style: {
-      background: "#004687",
-    },
-    onClick: function () {}, // Callback after click
-  }).showToast();
-}
-
 // Function to format numbers using numeral.js
 function formatNumber(value) {
   // Use numeral.js to format the value
   return numeral(value).format("0,0");
 }
+
+$('#countryInfoModal').on('hidden.bs.modal', function (e) {
+
+  $('#pre-load').removeClass("fadeOut");
+  
+});
