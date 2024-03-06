@@ -262,6 +262,13 @@ function fetchLocationInformation(country) {
   if (button3) button3.remove();
   if (button4) button4.remove();
   if (button5) button5.remove();
+  
+  $("#exampleModal2").on(
+    "show.bs.modal",
+    function () {
+      calcResult();
+    }
+  );
   $.ajax({
     url: "./scripts/getLocationInfoCountry.php",
     type: "GET",
@@ -349,7 +356,7 @@ function fetchLocationInformation(country) {
                           }
 
                           document.getElementById("loader").style.display =
-                            "none";
+                          "none";
                           modal.style.display = "none";
                           button1 = L.easyButton(
                             '<i class="fa-solid fa-circle-info"></i>',
@@ -382,22 +389,23 @@ function fetchLocationInformation(country) {
                               $("#areaInSqKm").html(
                                 numeral(moreInfo.geonames[0].areaInSqKm).format(
                                   "0,0"
-                                )
-                              );
-                              $("#postalCodeFormat").html(
-                                moreInfo.geonames[0].postalCodeFormat == ""
+                                  )
+                                  );
+                                  $("#postalCodeFormat").html(
+                                    moreInfo.geonames[0].postalCodeFormat == ""
                                   ? "n/a"
                                   : moreInfo.geonames[0].postalCodeFormat
-                              );
-
-                              $("#pre-load").addClass("fadeOut");
-                            }
-                          ).addTo(map);
+                                  );
+                                  
+                                  $("#pre-load").addClass("fadeOut");
+                                }
+                                ).addTo(map);
+                                
                           button2 = L.easyButton(
                             '<i class="fas fa-dollar-sign"></i>',
                             function (btn, map) {
                               $("#exampleModal2").modal("show");
-
+                              calcResult();
                               $("#fromCurrency").html(
                                 `From ${moreInfo.geonames[0].currencyCode}`
                               );
@@ -413,16 +421,9 @@ function fetchLocationInformation(country) {
                                 option.text = currencyData.code;
                                 selectElement.appendChild(option);
                               }
-
-                              function calcResult() {
-                                $("#toAmount").val(
-                                  numeral(
-                                    $("#fromAmount").val() *
-                                      $("#exchangeRate").val()
-                                  ).format("0,0.00")
-                                );
-                              }
-
+                              calcResult();
+                              calcResult();
+                              calcResult();
                               $("#fromAmount").on("keyup", function () {
                                 calcResult();
                               });
@@ -434,13 +435,6 @@ function fetchLocationInformation(country) {
                               $("#exchangeRate").on("change", function () {
                                 calcResult();
                               });
-
-                              $("#exampleModal").on(
-                                "show.bs.modal",
-                                function () {
-                                  calcResult();
-                                }
-                              );
                             }
                           ).addTo(map);
 
@@ -695,3 +689,9 @@ function formatNumber(value) {
 $("#countryInfoModal").on("hidden.bs.modal", function (e) {
   $("#pre-load").removeClass("fadeOut");
 });
+
+function calcResult() {
+  $("#toAmount").val(
+    numeral($("#fromAmount").val() * $("#exchangeRate").val()).format("0,0.00")
+  );
+}
