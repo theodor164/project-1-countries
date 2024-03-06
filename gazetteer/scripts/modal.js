@@ -594,13 +594,13 @@ function fetchLocationInformation(country) {
                               );
 
                               $("#todayMaxTemp").html(
-                                weatherForecastCity.forecast.forecastday[0].day
-                                  .maxtemp_c
+                                numeral(weatherForecastCity.forecast.forecastday[0].day
+                                  .maxtemp_c).format('0')
                               );
 
                               $("#todayMinTemp").html(
-                                weatherForecastCity.forecast.forecastday[0].day
-                                  .mintemp_c
+                                numeral(weatherForecastCity.forecast.forecastday[0].day
+                                  .mintemp_c).format('0')
                               );
 
                               $("#day1Date").text(
@@ -616,12 +616,12 @@ function fetchLocationInformation(country) {
                                   .condition.icon
                               );
                               $("#day1MinTemp").text(
-                                weatherForecastCity.forecast.forecastday[1].day
-                                  .mintemp_c
+                                numeral(weatherForecastCity.forecast.forecastday[1].day
+                                  .mintemp_c).format('0')
                               );
                               $("#day1MaxTemp").text(
-                                weatherForecastCity.forecast.forecastday[1].day
-                                  .maxtemp_c
+                                numeral(weatherForecastCity.forecast.forecastday[1].day
+                                  .maxtemp_c).format('0')
                               );
 
                               $("#day2Date").text(
@@ -637,12 +637,12 @@ function fetchLocationInformation(country) {
                                   .condition.icon
                               );
                               $("#day2MinTemp").text(
-                                weatherForecastCity.forecast.forecastday[2].day
-                                  .mintemp_c
+                                numeral(weatherForecastCity.forecast.forecastday[2].day
+                                  .mintemp_c).format('0')
                               );
                               $("#day2MaxTemp").text(
-                                weatherForecastCity.forecast.forecastday[2].day
-                                  .maxtemp_c
+                                numeral(weatherForecastCity.forecast.forecastday[2].day
+                                  .maxtemp_c).format('0')
                               );
 
                               $("#lastUpdated").text(
