@@ -319,6 +319,9 @@ function fetchLocationInformation(country) {
                   }
                   try {
                     var wikipediaLinks = JSON.parse(response);
+
+                    var countryName = locationInfo.results[0].components.country;
+                    var countryObject = wikipediaLinks.geonames.find((country) => country.title === countryName);
                   } catch (error) {
                     console.error("Error parsing JSON response:", error);
                   }
@@ -444,10 +447,10 @@ function fetchLocationInformation(country) {
                               $("#wikiModal").modal("show");
                               $("#wikipediaLink").attr(
                                 "href",
-                                `http://${wikipediaLinks.geonames[0].wikipediaUrl}`
+                                `http://${countryObject.wikipediaUrl}`
                               );
                               $("#wikipedia-summary").html(
-                                wikipediaLinks.geonames[0].summary
+                                countryObject.summary
                               );
                             }
                           ).addTo(map);

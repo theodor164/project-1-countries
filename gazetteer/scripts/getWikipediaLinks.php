@@ -17,7 +17,7 @@ if (empty($city)) {
 
 $encodedCity = urlencode($city);
 
-$apiUrl = "http://api.geonames.org/wikipediaSearchJSON?q={$encodedCity}&maxRows=5&username=theodor164";
+$apiUrl = "http://api.geonames.org/wikipediaSearchJSON?q={$encodedCity}&maxRows=50&username=theodor164";
 
 // Make the request to the API
 $response = file_get_contents($apiUrl);
